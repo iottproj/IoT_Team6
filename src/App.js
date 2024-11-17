@@ -62,7 +62,7 @@ function App() {
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         const fetchWeather = async () => {
-            const apiKey = ''; /* a98b26edd468647adf7c0ebc00f85e11 */
+            const apiKey = '';
             const city = 'Gyeonggi-do';
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=kr`;
 
