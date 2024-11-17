@@ -1,3 +1,4 @@
+/* 웹 기본 배경 */
 .App {
   background-color: rgb(234, 238, 236);
   min-height: 100vh;
@@ -9,20 +10,78 @@
   padding: 30px;
 }
 
+/* 타이틀 */
 .title {
   color: rgb(82, 115, 148);
   font-size: 1.8rem;
   font-weight: bold;
   margin: 0 0 15px 0;
 }
-
+/* 부제목 */
 .description {
   color: rgb(108, 167, 174);
   font-size: 1rem;
   margin-top: 8px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.borrow-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+/* 우산 번호 텍스트 필드 */
+.umbrella-input {
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 200px;
+  text-align: center;
+}
+
+/* 날씨 정보 표시 */
+.weather-info {
+  margin-top: 20px;
+  text-align: center;
+  color: rgb(82, 115, 148);
+}
+
+/* 대여, 반납 버튼 */
+.borrow-button, .return-button{
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: rgb(108, 167, 174);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+.borrow-button:hover, .return-button:hover{
+  background-color: rgb(72, 105, 138);
+}
+
+/* 사용 방법 버튼 */
+.instruction-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: rgb(108, 167, 174);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.instruction-button:hover {
+  background-color: rgb(72, 105, 138);
 }
