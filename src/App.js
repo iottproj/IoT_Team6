@@ -108,7 +108,7 @@ function App() {
                     <p>날씨: {weather.weather[0].description}</p>
                 </div>
             )}
-            /* 우산 번호 버튼 */
+            {/* 우산 번호 버튼 */}
             <div className="umbrella-buttons">
                 {Array.from({ length: 20 }, (_, index) => (
                     <button
