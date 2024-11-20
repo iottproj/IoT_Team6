@@ -24,34 +24,41 @@
   margin-top: 8px;
 }
 
-.borrow-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 20px;
-}
-.button-group {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-/* 우산 번호 텍스트 필드 */
-.umbrella-input {
-  padding: 10px;
-  font-size: 1rem;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 200px;
-  text-align: center;
-}
-
 /* 날씨 정보 표시 */
 .weather-info {
   margin-top: 20px;
   text-align: center;
   color: rgb(82, 115, 148);
+}
+
+/* 우산 번호 버튼 */
+.umbrella-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 60px);
+  grid-gap: 10px;
+  margin-top: 20px;
+}
+.umbrella-button {
+  padding: 15px;
+  font-size: 1.2rem;
+  color: rgb(108, 167, 174);
+  border: 2px solid rgb(108, 167, 174);
+  border-radius: 50%;
+  background-color: transparent;
+  cursor: pointer;
+}
+.umbrella-button.selected {
+  border-color: red;
+  color: red;
+}
+.umbrella-button:hover {
+  border-color: red;
+  color: red;
+}
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 /* 대여, 반납 버튼 */

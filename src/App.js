@@ -2,22 +2,30 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
-    const [umbrellaNumber, setUmbrellaNumber] = useState('');
+    const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
 
-    /* 우산 번호 입력 */
-    const handleInputChange = (e) => {
-        setUmbrellaNumber(e.target.value);
+    /* 우산 번호 클릭시 */
+    const handleButtonClick = (number) => {
+        setUmbrellaNumber(number);
     };
 
     /* 대여하기 버튼 클릭시 */
     const handleBorrowClick = () => {
-        alert(`${umbrellaNumber}번 우산 대여 성공!`);
+        if (umbrellaNumber) {
+            alert(`${umbrellaNumber}번 우산 대여 성공!`);
+        } else {
+            alert('우산 번호를 선택해주세요.');
+        }
     };
 
     /* 반납하기 버튼 클릭시 */
     const handleReturnClick = () => {
-        alert(`${umbrellaNumber}번 우산 반납 성공!`);
+        if (umbrellaNumber) {
+            alert(`${umbrellaNumber}번 우산 반납 성공!`);
+        } else {
+            alert('우산 번호를 선택해주세요.');
+        }
     };
 
     /* 사용방법 버튼 클릭시 */
@@ -51,7 +59,7 @@ function App() {
                 </head>
                 <body>
                     <h1>사용 방법</h1>
-                    <p>1. 우산 번호를 입력하세요.</p>
+                    <p>1. 우산 번호를 선택하세요.</p>
                     <p>2. "대여하기" 버튼을 클릭하여 우산을 대여하세요.</p>
                     <p>3. "반납하기" 버튼을 클릭하여 우산을 반납하세요.</p>
                     <button onclick="window.close()">닫기</button>
@@ -59,6 +67,7 @@ function App() {
             </html>
         `);
     };
+
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         const fetchWeather = async () => {
@@ -99,19 +108,22 @@ function App() {
                     <p>날씨: {weather.weather[0].description}</p>
                 </div>
             )}
+            /* 우산 번호 버튼 */
+            <div className="umbrella-buttons">
+                {Array.from({ length: 20 }, (_, index) => (
+                    <button
+                        key={index + 1}
+                        className={`umbrella-button ${umbrellaNumber === index + 1 ? 'selected' : ''}`}
+                        onClick={() => handleButtonClick(index + 1)}
+                    >
+                        {index + 1}
+                    </button>
+                ))}
+            </div>
 
-            <div className="borrow-section">
-                <input
-                    type="text"
-                    className="umbrella-input"
-                    placeholder="우산 번호를 입력하세요"
-                    value={umbrellaNumber}
-                    onChange={handleInputChange}
-                />
-                <div className="button-group">
-                    <button className="borrow-button" onClick={handleBorrowClick}>대여하기</button>
-                    <button className="return-button" onClick={handleReturnClick}>반납하기</button>
-                </div>
+            <div className="button-group">
+                <button className="borrow-button" onClick={handleBorrowClick}>대여하기</button>
+                <button className="return-button" onClick={handleReturnClick}>반납하기</button>
             </div>
         </div>
     );
