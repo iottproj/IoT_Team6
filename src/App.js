@@ -4,6 +4,7 @@ import './App.css';
 function App() {
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
+    const [city, setCity] = useState('');
 
     /* 우산 번호 클릭시 */
     const handleButtonClick = (number) => {
@@ -28,7 +29,7 @@ function App() {
         }
     };
 
-    /* 사용방법 버튼 클릭시 */
+    /* 사용방법 버튼 클릭시 새로운 윈도우 생성 */
     const handleOpenInstructions = () => {
         const instructionsWindow = window.open('', '사용 방법', 'width=600,height=400');
         instructionsWindow.document.write(`
@@ -60,8 +61,8 @@ function App() {
                 <body>
                     <h1>사용 방법</h1>
                     <p>1. 우산 번호를 선택하세요.</p>
-                    <p>2. "대여하기" 버튼을 클릭하여 우산을 대여하세요.</p>
-                    <p>3. "반납하기" 버튼을 클릭하여 우산을 반납하세요.</p>
+                    <p>2-1. "대여하기" 버튼을 클릭하여 우산을 대여하세요. 우산 대여 기간은 7일입니다.</p>
+                    <p>2-2. 우산을 반납하려면 "반납하기" 버튼을 클릭하여 우산을 반납하세요. 반드시 올바른 번호에 우산을 넣어주세요!</p>
                     <button onclick="window.close()">닫기</button>
                 </body>
             </html>
@@ -82,6 +83,7 @@ function App() {
 
                 if (data.main && data.weather) {
                     setWeather(data);
+                    handleCityName(data.name);
                 } else {
                     console.error("날씨 데이터를 찾을 수 없습니다:", data);
                 }
@@ -89,24 +91,41 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-
         fetchWeather();
     }, []);
+    /* 도시 이름 한글 출력 */
+    const handleCityName = (cityName) => {
+            if (cityName === 'Gyeonggi-do') {
+                setCity('경기도');
+            } else if (cityName === 'Seoul') {
+                setCity('서울');
+            } else {
+                setCity(cityName);
+            }
+    };
 
     return (
         <div className="App">
             <button className="instruction-button" onClick={handleOpenInstructions}>사용 방법</button>
 
-            <h1 className="title">무인 우산 대여 시스템</h1>
+            <h1 className="title">무인 우산 대여 서비스</h1>
             <p className="description">우산이 필요하신가요? 편하게 우산을 빌려보세요.</p>
 
             {/* 실시간 날씨 정보 출력 */}
             {weather && weather.main && weather.weather && (
                 <div className="weather-info">
-                    <h2>현재 날씨: {weather.name}</h2>
-                    <p>온도: {weather.main.temp}°C</p>
-                    <p>날씨: {weather.weather[0].description}</p>
+                    <h2>위치: {city}</h2>
+                    <div className="weather-details">
+                        <p>현재 온도: {weather.main.temp}°C</p>
+                        <p>현재 날씨: {weather.weather[0].description}</p>
+                        <p>습도: {weather.main.humidity}%</p>
+                        <p>압력: {weather.main.pressure} hPa</p>
+                        {/* 비가 온다면 최근 1시간 강수량도 출력 */}
+                        {weather.rain && weather.rain['1h'] && (
+                          <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
+                        )}
                 </div>
+            </div>
             )}
             {/* 우산 번호 버튼 */}
             <div className="umbrella-buttons">
