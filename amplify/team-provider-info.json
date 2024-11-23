@@ -1,0 +1,20 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-iotteam6gen1-dev-28e48-authRole",
+      "UnauthRoleArn": "arn:aws:iam::851725339228:role/amplify-iotteam6gen1-dev-28e48-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::851725339228:role/amplify-iotteam6gen1-dev-28e48-authRole",
+      "Region": "ap-northeast-2",
+      "DeploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
+      "UnauthRoleName": "amplify-iotteam6gen1-dev-28e48-unauthRole",
+      "StackName": "amplify-iotteam6gen1-dev-28e48",
+      "StackId": "arn:aws:cloudformation:ap-northeast-2:851725339228:stack/amplify-iotteam6gen1-dev-28e48/dd0a4530-a98f-11ef-b524-0ac07ffc08c9",
+      "AmplifyAppId": "da3kn7728hj41"
+    },
+    "categories": {
+      "auth": {
+        "iotteam6gen13cd5f954": {}
+      }
+    }
+  }
+}
