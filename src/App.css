@@ -90,11 +90,10 @@
   background-color: rgb(72, 105, 138);
 }
 
-/* 사용 방법 버튼 */
-.instruction-button {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+/* 모바일용 사용방법 버튼 스타일 */
+.instruction-button-mobile {
+  display: block;
+  margin: 20px auto; /* 중앙 정렬 */
   padding: 10px 20px;
   font-size: 1rem;
   background-color: rgb(108, 167, 174);
@@ -103,6 +102,26 @@
   border-radius: 5px;
   cursor: pointer;
 }
-.instruction-button:hover {
+.instruction-button-mobile:hover {
   background-color: rgb(72, 105, 138);
+}
+
+/* 프로필 버튼 */
+.profile-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 50px;
+  height: 50px;
+  background-image: url('/public/iconimage.png'); /* public 폴더 기준 경로 */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: none;
+  border-radius: 50%; /* 원형으로 만들기 */
+  overflow: hidden; /* 원 밖의 내용 숨기기 */
+  cursor: pointer;
+}
+.profile-button:hover {
+  opacity: 0.8; /* 호버 시 약간 투명 효과 */
 }
