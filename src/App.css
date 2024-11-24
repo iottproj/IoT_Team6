@@ -1,61 +1,58 @@
-/* 웹 기본 배경 */
-.App {
+/* 기본 설정 */
+body, .App {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
   background-color: rgb(234, 238, 236);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
   text-align: center;
-  padding: 30px;
 }
 
 /* 타이틀 */
 .title {
+  font-size: 1.5rem; /* 타이틀 크기 조정 */
   color: rgb(82, 115, 148);
-  font-size: 1.8rem;
-  font-weight: bold;
-  margin: 0 0 15px 0;
-}
-/* 부제목 */
-.description {
-  color: rgb(108, 167, 174);
-  font-size: 1rem;
-  margin-top: 8px;
+  margin: 10px 0; /* 여백 추가 */
 }
 
-/* 날씨 정보 표시 */
-.weather-info {
-  margin-top: 20px;
-  text-align: center;
+/* 설명 텍스트 */
+.description {
+  font-size: 0.9rem; /* 텍스트 크기 줄임 */
+  color: rgb(108, 167, 174);
+  margin-bottom: 15px;
+}
+
+/* 날씨 정보 */
+.weather-info h2 {
+  font-size: 1rem; /* 위치 텍스트 크기 줄임 */
   color: rgb(82, 115, 148);
 }
 .weather-details {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+  display: flex;
+  flex-wrap: wrap; /* 줄바꿈 허용 */
+  justify-content: center; /* 중앙 정렬 */
+  gap: 10px; /* 각 항목 간 여백 */
 }
 .weather-details p {
-    margin: 0;
-    font-size: 1.1rem;
+  margin: 0;
+  font-size: 0.9rem; /* 날씨 정보 텍스트 크기 줄임 */
+  line-height: 1.4; /* 텍스트 간격 조정 */
 }
 
 /* 우산 번호 버튼 */
 .umbrella-buttons {
   display: grid;
-  grid-template-columns: repeat(5, 60px);
-  grid-gap: 10px;
-  margin-top: 20px;
+  grid-template-columns: repeat(5, 1fr); /* 5개씩 나란히 */
+  gap: 8px; /* 버튼 간 여백 */
+  margin: 20px 0;
   padding: 10px;
+  background-color: rgb(234, 238, 236);
   border: 2px solid rgb(82, 115, 148);
   border-radius: 15px;
-  background-color: rgb(234, 238, 236);
-
 }
 .umbrella-button {
-  padding: 15px;
-  font-size: 1.2rem;
-  color: rgb(108, 167, 174);
+  width: 50px; /* 버튼 크기 줄임 */
+  height: 50px;
+  font-size: 0.8rem; /* 텍스트 크기 줄임 */
   border: 2px solid rgb(108, 167, 174);
   border-radius: 50%;
   background-color: transparent;
@@ -69,33 +66,33 @@
   border-color: red;
   color: red;
 }
+
+/* 대여하기, 반납하기 버튼 */
 .button-group {
   display: flex;
+  justify-content: center;
   gap: 10px;
-  margin-top: 10px;
+  margin: 15px 0;
 }
-
-/* 대여, 반납 버튼 */
-.borrow-button, .return-button{
-  padding: 10px 20px;
-  font-size: 1rem;
+.borrow-button, .return-button {
+  padding: 8px 16px;
+  font-size: 0.9rem; /* 버튼 텍스트 크기 줄임 */
   background-color: rgb(108, 167, 174);
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-top: 10px;
 }
-.borrow-button:hover, .return-button:hover{
+.borrow-button:hover, .return-button:hover {
   background-color: rgb(72, 105, 138);
 }
 
-/* 모바일용 사용방법 버튼 스타일 */
+/* 사용방법 버튼 */
 .instruction-button-mobile {
   display: block;
-  margin: 20px auto; /* 중앙 정렬 */
-  padding: 10px 20px;
-  font-size: 1rem;
+  margin: 10px auto; /* 중앙 정렬 */
+  padding: 8px 16px;
+  font-size: 0.9rem; /* 버튼 텍스트 크기 줄임 */
   background-color: rgb(108, 167, 174);
   color: white;
   border: none;
@@ -109,19 +106,14 @@
 /* 프로필 버튼 */
 .profile-button {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  width: 50px;
-  height: 50px;
-  background-image: url('/public/iconimage.png'); /* public 폴더 기준 경로 */
+  top: 10px; /* 상단 여백 조정 */
+  left: 10px;
+  width: 40px; /* 크기 줄임 */
+  height: 40px;
+  background-image: url('/public/iconimage.png'); /* 경로 */
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
   border: none;
-  border-radius: 50%; /* 원형으로 만들기 */
-  overflow: hidden; /* 원 밖의 내용 숨기기 */
+  border-radius: 50%;
   cursor: pointer;
-}
-.profile-button:hover {
-  opacity: 0.8; /* 호버 시 약간 투명 효과 */
 }
