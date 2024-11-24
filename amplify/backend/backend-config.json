@@ -1,4 +1,20 @@
 {
+  "api": {
+    "UserInfoAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "UserInfoCRUD"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
   "auth": {
     "iotteam6gen13cd5f954": {
       "customAuth": false,
@@ -27,6 +43,48 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
+    }
+  },
+  "function": {
+    "UserInfoCRUD": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "UserInfoDB"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_UserInfoCRUD_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UserInfoCRUD"
+        }
+      ]
+    },
+    "AMPLIFY_function_UserInfoCRUD_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UserInfoCRUD"
+        }
+      ]
+    }
+  },
+  "storage": {
+    "UserInfoDB": {
+      "providerPlugin": "awscloudformation",
+      "service": "DynamoDB"
     }
   }
 }
