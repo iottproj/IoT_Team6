@@ -36,12 +36,14 @@ function App() {
             <html>
                 <head>
                     <title>사용 방법</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <style>
                         body {
                             font-family: Arial, sans-serif;
                             text-align: center;
                             padding: 10px;
                             background-color: rgb(234, 238, 236);
+                            margin: 0;
                         }
                         h1 {
                             font-size: 1.4rem;
@@ -63,6 +65,7 @@ function App() {
                         button:hover {
                             background-color: rgb(72, 105, 138);
                         }
+                        /* Mobile responsiveness */
                         @media (max-width: 600px) {
                             h1 {
                                 font-size: 1.2rem;
@@ -87,20 +90,21 @@ function App() {
             </html>
         `);
     };
-
-    /* 프로필 버튼 클릭시 새로운 윈도우 생성 */
+    /* 프로필 클릭시 새로운 창 표시 */
     const handleOpenProfile = () => {
         const profileWindow = window.open('', '프로필', 'width=400,height=300');
         profileWindow.document.write(`
             <html>
                 <head>
                     <title>프로필</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
                     <style>
                         body {
                             font-family: Arial, sans-serif;
                             text-align: center;
                             padding: 10px;
                             background-color: rgb(234, 238, 236);
+                            margin: 0;
                         }
                         h1 {
                             font-size: 1.4rem;
@@ -122,6 +126,7 @@ function App() {
                         button:hover {
                             background-color: rgb(72, 105, 138);
                         }
+                        /* Mobile responsiveness */
                         @media (max-width: 600px) {
                             h1 {
                                 font-size: 1.2rem;
