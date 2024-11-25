@@ -10,16 +10,26 @@
       "StackName": "amplify-iotteam6gen1-dev-28e48",
       "StackId": "arn:aws:cloudformation:ap-northeast-2:851725339228:stack/amplify-iotteam6gen1-dev-28e48/dd0a4530-a98f-11ef-b524-0ac07ffc08c9",
       "AmplifyAppId": "da3kn7728hj41",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-iotteam6gen1-dev-28e48-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json"
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-iotteam6gen1-dev-28e48-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-iotteam6gen1-dev-28e48-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "iotteam6gen13cd5f954": {}
+        "iotteam6gen13cd5f954": {
+          "googleClientId": "875422065030-kc4es9so4q71mrld0d264gmm8ap39t3n.apps.googleusercontent.com"
+        }
       },
       "function": {
         "UserInfoCRUD": {
           "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
           "s3Key": "amplify-builds/UserInfoCRUD-764e726c64424e75556a-build.zip"
+        },
+        "iotteam6gen13cd5f954CustomMessage": {
+          "REDIRECTURL": "",
+          "EMAILSUBJECT": "",
+          "EMAILMESSAGE": "",
+          "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
+          "s3Key": "amplify-builds/iotteam6gen13cd5f954CustomMessage-79797243755045376e46-build.zip"
         }
       },
       "storage": {

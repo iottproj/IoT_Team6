@@ -10,6 +10,7 @@ export type AmplifyDependentResourcesAttributes = {
     "iotteam6gen13cd5f954": {
       "AppClientID": "string",
       "AppClientIDWeb": "string",
+      "GoogleWebClient": "string",
       "HostedUIDomain": "string",
       "IdentityPoolId": "string",
       "IdentityPoolName": "string",
@@ -21,6 +22,13 @@ export type AmplifyDependentResourcesAttributes = {
   },
   "function": {
     "UserInfoCRUD": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "iotteam6gen13cd5f954CustomMessage": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",

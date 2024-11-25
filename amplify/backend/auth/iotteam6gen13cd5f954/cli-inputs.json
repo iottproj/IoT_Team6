@@ -14,11 +14,15 @@
     ],
     "smsAuthenticationMessage": "Your authentication code is {####}",
     "smsVerificationMessage": "Your verification code is {####}",
-    "emailVerificationSubject": "Your verification code",
+    "emailVerificationSubject": "Your verification Code From IotTeam6",
     "emailVerificationMessage": "Your verification code is {####}",
-    "defaultPasswordPolicy": false,
+    "defaultPasswordPolicy": true,
     "passwordPolicyMinLength": 8,
-    "passwordPolicyCharacters": [],
+    "passwordPolicyCharacters": [
+      "Requires Uppercase",
+      "Requires Numbers",
+      "Requires Symbols"
+    ],
     "requiredAttributes": [
       "email"
     ],
@@ -36,7 +40,7 @@
     "sharedId": "3cd5f954",
     "resourceName": "iotteam6gen13cd5f954",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "defaultSocial",
+    "useDefault": "manual",
     "hostedUI": true,
     "usernameAttributes": [
       "email"
@@ -63,7 +67,34 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"https://gen1-test.da3kn7728hj41.amplifyapp.com/\"],\"LogoutURLs\":[\"https://gen1-test.da3kn7728hj41.amplifyapp.com/\"]}"
+    "dependsOn": [
+      {
+        "category": "function",
+        "resourceName": "iotteam6gen13cd5f954CustomMessage",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      }
+    ],
+    "thirdPartyAuth": true,
+    "authProviders": [
+      "accounts.google.com"
+    ],
+    "userPoolGroups": false,
+    "adminQueries": false,
+    "triggers": {
+      "CustomMessage": [
+        "verification-link"
+      ]
+    },
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"implicit\"],\"AllowedOAuthScopes\":[\"email\",\"openid\",\"profile\"],\"CallbackURLs\":[\"https://gen1-test.da3kn7728hj41.amplifyapp.com/\"],\"LogoutURLs\":[\"https://iotteam6gen1-dev.auth.ap-northeast-2.amazoncognito.com/login?response_type=code&client_id=4fqnca27gpaeq5r0edaf183bkb&redirect_uri=https://gen1-test.da3kn7728hj41.amplifyapp.com/\"]}",
+    "verificationBucketName": "iotteam6gen13cd5f954verificationbucket",
+    "parentStack": {
+      "Ref": "AWS::StackId"
+    },
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"iotteam6gen13cd5f954CustomMessage\"\n  }\n]",
+    "permissions": []
   }
 }

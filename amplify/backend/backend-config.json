@@ -18,14 +18,28 @@
   "auth": {
     "iotteam6gen13cd5f954": {
       "customAuth": false,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn",
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "iotteam6gen13cd5f954CustomMessage",
+          "triggerProvider": "Cognito"
+        }
+      ],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
+          "passwordPolicyCharacters": [
+            "REQUIRES_UPPERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS"
+          ],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
@@ -61,9 +75,22 @@
       ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
+    },
+    "iotteam6gen13cd5f954CustomMessage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
     }
   },
   "parameters": {
+    "AMPLIFY_auth_iotteam6gen13cd5f954_googleClientId": {
+      "usedBy": [
+        {
+          "category": "auth",
+          "resourceName": "iotteam6gen13cd5f954"
+        }
+      ]
+    },
     "AMPLIFY_function_UserInfoCRUD_deploymentBucketName": {
       "usedBy": [
         {
@@ -77,6 +104,46 @@
         {
           "category": "function",
           "resourceName": "UserInfoCRUD"
+        }
+      ]
+    },
+    "AMPLIFY_function_iotteam6gen13cd5f954CustomMessage_EMAILMESSAGE": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iotteam6gen13cd5f954CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iotteam6gen13cd5f954CustomMessage_EMAILSUBJECT": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iotteam6gen13cd5f954CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iotteam6gen13cd5f954CustomMessage_REDIRECTURL": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iotteam6gen13cd5f954CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iotteam6gen13cd5f954CustomMessage_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iotteam6gen13cd5f954CustomMessage"
+        }
+      ]
+    },
+    "AMPLIFY_function_iotteam6gen13cd5f954CustomMessage_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "iotteam6gen13cd5f954CustomMessage"
         }
       ]
     }
