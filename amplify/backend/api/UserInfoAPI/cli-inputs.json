@@ -1,17 +1,11 @@
 {
   "version": 1,
   "paths": {
-    "/userinfo": {
-      "name": "/userinfo",
+    "/get": {
+      "name": "/get",
       "lambdaFunction": "UserInfoCRUD",
       "permissions": {
-        "setting": "private",
-        "auth": [
-          "create",
-          "read",
-          "update",
-          "delete"
-        ]
+        "setting": "open"
       }
     }
   }
