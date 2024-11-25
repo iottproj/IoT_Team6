@@ -40,8 +40,15 @@ function App() {
                         body {
                             font-family: Arial, sans-serif;
                             text-align: center;
-                            padding: 20px;
+                            padding: 10px;
                             background-color: rgb(234, 238, 236);
+                        }
+                        h1 {
+                            font-size: 1.4rem;
+                        }
+                        p {
+                            font-size: 1rem;
+                            margin: 10px 0;
                         }
                         button {
                             padding: 10px 20px;
@@ -55,6 +62,18 @@ function App() {
                         }
                         button:hover {
                             background-color: rgb(72, 105, 138);
+                        }
+                        @media (max-width: 600px) {
+                            h1 {
+                                font-size: 1.2rem;
+                            }
+                            p {
+                                font-size: 0.9rem;
+                            }
+                            button {
+                                padding: 8px 16px;
+                                font-size: 0.9rem;
+                            }
                         }
                     </style>
                 </head>
@@ -80,8 +99,15 @@ function App() {
                         body {
                             font-family: Arial, sans-serif;
                             text-align: center;
-                            padding: 20px;
+                            padding: 10px;
                             background-color: rgb(234, 238, 236);
+                        }
+                        h1 {
+                            font-size: 1.4rem;
+                        }
+                        p {
+                            font-size: 1rem;
+                            margin: 10px 0;
                         }
                         button {
                             padding: 10px 20px;
@@ -95,6 +121,18 @@ function App() {
                         }
                         button:hover {
                             background-color: rgb(72, 105, 138);
+                        }
+                        @media (max-width: 600px) {
+                            h1 {
+                                font-size: 1.2rem;
+                            }
+                            p {
+                                font-size: 0.9rem;
+                            }
+                            button {
+                                padding: 8px 16px;
+                                font-size: 0.9rem;
+                            }
                         }
                     </style>
                 </head>
