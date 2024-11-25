@@ -69,10 +69,49 @@ function App() {
         `);
     };
 
+    /* 프로필 버튼 클릭시 새로운 윈도우 생성 */
+    const handleOpenProfile = () => {
+        const profileWindow = window.open('', '프로필', 'width=400,height=300');
+        profileWindow.document.write(`
+            <html>
+                <head>
+                    <title>프로필</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            text-align: center;
+                            padding: 20px;
+                            background-color: rgb(234, 238, 236);
+                        }
+                        button {
+                            padding: 10px 20px;
+                            font-size: 1rem;
+                            background-color: rgb(108, 167, 174);
+                            color: white;
+                            border: none;
+                            border-radius: 5px;
+                            cursor: pointer;
+                            margin-top: 20px;
+                        }
+                        button:hover {
+                            background-color: rgb(72, 105, 138);
+                        }
+                    </style>
+                </head>
+                <body>
+                    <h1>프로필 정보</h1>
+                    <p>로그인 아이디: example@email.com</p>
+                    <p>총 대여 횟수: 3회</p>
+                    <button onclick="window.close()">닫기</button>
+                </body>
+            </html>
+        `);
+    };
+
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         const fetchWeather = async () => {
-            const apiKey = process.env.REACT_APP_WEATHER_API_KEY
+            const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
             const city = 'Gyeonggi-do';
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=kr`;
 
@@ -93,20 +132,22 @@ function App() {
         };
         fetchWeather();
     }, []);
+
     /* 도시 이름 한글 출력 */
     const handleCityName = (cityName) => {
-            if (cityName === 'Gyeonggi-do') {
-                setCity('경기도');
-            } else if (cityName === 'Seoul') {
-                setCity('서울');
-            } else {
-                setCity(cityName);
-            }
+        if (cityName === 'Gyeonggi-do') {
+            setCity('경기도');
+        } else if (cityName === 'Seoul') {
+            setCity('서울');
+        } else {
+            setCity(cityName);
+        }
     };
 
     return (
         <div className="App">
-            <button className="instruction-button" onClick={handleOpenInstructions}>사용 방법</button>
+            {/* 프로필 버튼 */}
+            <button className="profile-button" onClick={handleOpenProfile}></button>
 
             <h1 className="title">무인 우산 대여 서비스</h1>
             <p className="description">우산이 필요하신가요? 편하게 우산을 빌려보세요.</p>
@@ -120,12 +161,11 @@ function App() {
                         <p>현재 날씨: {weather.weather[0].description}</p>
                         <p>습도: {weather.main.humidity}%</p>
                         <p>압력: {weather.main.pressure} hPa</p>
-                        {/* 비가 온다면 최근 1시간 강수량도 출력 */}
                         {weather.rain && weather.rain['1h'] && (
                           <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
                         )}
+                    </div>
                 </div>
-            </div>
             )}
             {/* 우산 번호 버튼 */}
             <div className="umbrella-buttons">
@@ -144,6 +184,9 @@ function App() {
                 <button className="borrow-button" onClick={handleBorrowClick}>대여하기</button>
                 <button className="return-button" onClick={handleReturnClick}>반납하기</button>
             </div>
+
+            {/* 사용 방법 버튼 */}
+            <button className="instruction-button-mobile" onClick={handleOpenInstructions}>사용 방법</button>
         </div>
     );
 }
