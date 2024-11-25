@@ -63,7 +63,6 @@ function App() {
                         button:hover {
                             background-color: rgb(72, 105, 138);
                         }
-                        /* Mobile responsiveness */
                         @media (max-width: 600px) {
                             h1 {
                                 font-size: 1.2rem;
@@ -123,7 +122,6 @@ function App() {
                         button:hover {
                             background-color: rgb(72, 105, 138);
                         }
-                        /* Mobile responsiveness */
                         @media (max-width: 600px) {
                             h1 {
                                 font-size: 1.2rem;
