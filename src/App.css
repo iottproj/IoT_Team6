@@ -67,42 +67,6 @@ body, .App {
   color: red;
 }
 
-/* 대여하기, 반납하기 버튼 */
-.button-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin: 15px 0;
-}
-.borrow-button, .return-button {
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  background-color: rgb(108, 167, 174);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.borrow-button:hover, .return-button:hover {
-  background-color: rgb(72, 105, 138);
-}
-
-/* 사용방법 버튼 */
-.instruction-button-mobile {
-  display: block;
-  margin: 10px auto;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  background-color: rgb(108, 167, 174);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-.instruction-button-mobile:hover {
-  background-color: rgb(72, 105, 138);
-}
-
 /* 프로필 버튼 */
 .profile-button {
   position: absolute;
@@ -116,4 +80,47 @@ body, .App {
   border: none;
   border-radius: 50%;
   cursor: pointer;
+}
+
+/* 버튼 그룹 그리드 */
+.button-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: rgb(245, 250, 255);
+  border: 2px solid rgb(108, 167, 174);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 각 버튼의 공통 스타일 */
+.button-grid button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: rgb(108, 167, 174);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 버튼 호버 효과 */
+.button-grid button:hover {
+  background-color: rgb(72, 105, 138);
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 반응형 디자인 */
+@media (max-width: 600px) {
+  .button-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 }
