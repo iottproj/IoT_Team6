@@ -28,6 +28,14 @@ function App() {
             alert('우산 번호를 선택해주세요.');
         }
     };
+    /* 대여 연장하기 버튼 클릭시 */
+        const handleExtendBorrowClick = () => {
+            if (umbrellaNumber) {
+                alert(`${umbrellaNumber}번 우산 대여가 1일 연장되었습니다.`);
+            } else {
+                alert('우산 번호를 선택해주세요.');
+            }
+        };
 
     /* 사용방법 버튼 클릭시 새로운 윈도우 생성 */
     const handleOpenInstructions = () => {
@@ -83,8 +91,10 @@ function App() {
                 <body>
                     <h1>사용 방법</h1>
                     <p>1. 우산 번호를 선택하세요.</p>
-                    <p>2-1. "대여하기" 버튼을 클릭하여 우산을 대여하세요. 우산 대여 기간은 7일입니다.</p>
-                    <p>2-2. 우산을 반납하려면 "반납하기" 버튼을 클릭하여 우산을 반납하세요. 반드시 올바른 번호에 우산을 넣어주세요!</p>
+                    <p>2. "대여하기" 버튼을 클릭하여 우산을 대여하세요. 우산 대여 기간은 3일입니다.</p>
+                    <p>3.. 우산을 반납하려면 "반납하기" 버튼을 클릭하여 우산을 반납하세요. 반드시 올바른 번호에 우산을 넣어주세요!</p>
+                    <p># 만약 우산 대여 기간을 연장하고 싶다면 우산 번호를 누르고 "대여 연장하기" 버튼을 눌러주세요!</p>
+                    <p> → 대여 연장기간은 "1일" 입니다. </p>
                     <button onclick="window.close()">닫기</button>
                 </body>
             </html>
@@ -126,7 +136,6 @@ function App() {
                         button:hover {
                             background-color: rgb(72, 105, 138);
                         }
-                        /* Mobile responsiveness */
                         @media (max-width: 600px) {
                             h1 {
                                 font-size: 1.2rem;
@@ -145,7 +154,19 @@ function App() {
                     <h1>프로필 정보</h1>
                     <p>로그인 아이디: example@email.com</p>
                     <p>총 대여 횟수: 3회</p>
-                    <button onclick="window.close()">닫기</button>
+                    <div>
+                        <button onclick="window.close()">닫기</button>
+                        <button onclick="handleLogout()">로그아웃</button>
+                    <div>
+                    <script>
+                        function handleLogout() {
+                            const confirmLogout = confirm('로그아웃 하시겠습니까?');
+                            if(confirmLogout) {
+                                alert('로그아웃 되었습니다!');
+                                window.close();
+                            }
+                        }
+                    </script>
                 </body>
             </html>
         `);
@@ -203,7 +224,6 @@ function App() {
                         <p>현재 온도: {weather.main.temp}°C</p>
                         <p>현재 날씨: {weather.weather[0].description}</p>
                         <p>습도: {weather.main.humidity}%</p>
-                        <p>압력: {weather.main.pressure} hPa</p>
                         {weather.rain && weather.rain['1h'] && (
                           <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
                         )}
@@ -223,13 +243,12 @@ function App() {
                 ))}
             </div>
 
-            <div className="button-group">
-                <button className="borrow-button" onClick={handleBorrowClick}>대여하기</button>
-                <button className="return-button" onClick={handleReturnClick}>반납하기</button>
+            <div className="button-grid">
+                <button onClick={handleBorrowClick}>대여하기</button>
+                <button onClick={handleReturnClick}>반납하기</button>
+                <button onClick={handleOpenInstructions}>사용 방법</button>
+                <button onClick={handleExtendBorrowClick}>대여 연장하기</button>
             </div>
-
-            {/* 사용 방법 버튼 */}
-            <button className="instruction-button-mobile" onClick={handleOpenInstructions}>사용 방법</button>
         </div>
     );
 }
