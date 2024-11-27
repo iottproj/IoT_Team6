@@ -113,6 +113,7 @@ function App() {
             try {
               //const user = await fetchUserAttributes();
               const user = await getCurrentUser();
+              console.log('getCurrentUser() returned:', user);
               setUserInfo({
                 username:user.username,
                 userId:user.userId
