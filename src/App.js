@@ -114,7 +114,7 @@ function App() {
               const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
               //const user = await getCurrentUser();
               if (idToken) {
-                   const email = idToken.payload; // 이메일 추출
+                   const email = idToken.email; // 이메일 추출
                    console.log('User email:', email);
 
                    setUserInfo({
