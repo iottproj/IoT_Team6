@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { getCurrentUser } from 'aws-amplify/auth';
+import { signInWithRedirect } from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify'
 import awsExports from './aws-exports';
 
@@ -145,6 +146,13 @@ function App() {
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
+        async function handleLogin() {
+            try {
+              await signInWithRedirect(); // Hosted UI로 리디렉션
+            } catch (error) {
+              console.error('Error during login:', error);
+            }
+        }
         const fetchWeather = async () => {
             const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
             const city = 'Gyeonggi-do';
@@ -167,19 +175,17 @@ function App() {
         };
         async function fetchUser() {
             try {
-              const { username, userId, signInDetails } = await getCurrentUser();
+              const user = await getCurrentUser();
               setUserInfo({
-                username,
-                userId,
-                signInDetails,
+                username: user.username,
+                userId:user.attributes.sub,
+                email: user.attributes.email,
               });
-              console.log(`The username: ${username}`);
-              console.log(`The userId: ${userId}`);
-              console.log(`The signInDetails: ${signInDetails}`);
             } catch (err) {
               console.log('Error fetching user:', err);
             }
-          }
+        }
+        handleLogin();
         fetchUser();
         fetchWeather();
     }, []);
