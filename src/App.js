@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { Auth } from 'aws-amplify';
+import { getCurrentUser } from 'aws-amplify/auth';
 
 function App() {
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
-
+    const [userInfo, setUserInfo] = useState({
+        username: '',
+        userId: '',
+        signInDetails: null,
+    });
     //const currentSession = Auth.currentSession();
      
     /* 우산 번호 클릭시 */
@@ -114,9 +118,8 @@ function App() {
                 </head>
                 <body>
                     <h1>프로필 정보</h1>
-                    <p>로그인 아이디: ${username}</p>
-                    <p>로그인 아이디: ${userId}</p>
-                    <p>로그인 아이디: ${signInDetails}</p>
+                    <p>로그인 아이디: ${userInfo.username}</p>
+                    <p>로그인 아이디: ${userInfo.userId}</p>
                     <p>총 대여 횟수: 3회</p>
                     <div>
                         <button onclick="window.close()">닫기</button>
@@ -160,7 +163,12 @@ function App() {
         };
         async function fetchUser() {
             try {
-              const { username, userId, signInDetails } = await Auth.getCurrentUser();
+              const { username, userId, signInDetails } = await getCurrentUser();
+              setUserInfo({
+                username,
+                userId,
+                signInDetails,
+              });
               console.log(`The username: ${username}`);
               console.log(`The userId: ${userId}`);
               console.log(`The signInDetails: ${signInDetails}`);
