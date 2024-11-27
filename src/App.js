@@ -32,6 +32,15 @@ function App() {
         }
     };
 
+    /* 대여 연장하기 버튼 클릭시 */
+    const handleExtendBorrowClick = () => {
+        if (umbrellaNumber) {
+            alert(`${umbrellaNumber}번 우산 대여가 1일 연장되었습니다.`);
+        } else {
+            alert('우산 번호를 선택해주세요.');
+        }
+    };
+
     /* 사용방법 버튼 클릭시 새로운 윈도우 생성 */
     const handleOpenInstructions = () => {
         const instructionsWindow = window.open('', '사용 방법', 'width=600,height=400');
@@ -64,8 +73,10 @@ function App() {
                 <body>
                     <h1>사용 방법</h1>
                     <p>1. 우산 번호를 선택하세요.</p>
-                    <p>2-1. "대여하기" 버튼을 클릭하여 우산을 대여하세요. 우산 대여 기간은 7일입니다.</p>
-                    <p>2-2. 우산을 반납하려면 "반납하기" 버튼을 클릭하여 우산을 반납하세요. 반드시 올바른 번호에 우산을 넣어주세요!</p>
+                    <p>2. "대여하기" 버튼을 클릭하여 우산을 대여하세요. 우산 대여 기간은 3일입니다.</p>
+                    <p>3.. 우산을 반납하려면 "반납하기" 버튼을 클릭하여 우산을 반납하세요. 반드시 올바른 번호에 우산을 넣어주세요!</p>
+                    <p># 만약 우산 대여 기간을 연장하고 싶다면 우산 번호를 누르고 "대여 연장하기" 버튼을 눌러주세요!</p>
+                    <p> → 대여 연장기간은 "1일" 입니다. </p>
                     <button onclick="window.close()">닫기</button>
                 </body>
             </html>
@@ -105,7 +116,19 @@ function App() {
                     <h1>프로필 정보</h1>
                     <p>로그인 아이디: example@email.com</p>
                     <p>총 대여 횟수: 3회</p>
-                    <button onclick="window.close()">닫기</button>
+                    <div>
+                        <button onclick="window.close()">닫기</button>
+                        <button onclick="handleLogout()">로그아웃</button>
+                    <div>
+                    <script>
+                        function handleLogout() {
+                            const confirmLogout = confirm('로그아웃 하시겠습니까?');
+                            if(confirmLogout) {
+                                alert('로그아웃 되었습니다!');
+                                window.close();
+                            }
+                        }
+                    </script>
                 </body>
             </html>
         `);
@@ -183,13 +206,12 @@ function App() {
                 ))}
             </div>
 
-            <div className="button-group">
-                <button className="borrow-button" onClick={handleBorrowClick}>대여하기</button>
-                <button className="return-button" onClick={handleReturnClick}>반납하기</button>
+            <div className="button-grid">
+                <button onClick={handleBorrowClick}>대여하기</button>
+                <button onClick={handleReturnClick}>반납하기</button>
+                <button onClick={handleOpenInstructions}>사용 방법</button>
+                <button onClick={handleExtendBorrowClick}>대여 연장하기</button>
             </div>
-
-            {/* 사용 방법 버튼 */}
-            <button className="instruction-button-mobile" onClick={handleOpenInstructions}>사용 방법</button>
         </div>
     );
 }
