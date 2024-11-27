@@ -145,9 +145,7 @@ function App() {
     useEffect(() => {
         async function handleLogin() {
             try {
-              await signInWithRedirect({
-                provider: 'Google'
-              }); // Hosted UI로 리디렉션
+              await signInWithRedirect(); // Hosted UI로 리디렉션
             } catch (error) {
               console.error('Error during login:', error);
             }
