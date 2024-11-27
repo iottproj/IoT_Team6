@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { getCurrentUser } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
+import { signOut } from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify'
 import awsExports from './aws-exports';
 
@@ -16,8 +17,17 @@ function App() {
         userId: '',
         signInDetails: null,
     });
-    //const currentSession = Auth.currentSession();
      
+
+    async function handleLogout() {
+        try {
+            await signOut();
+            console.log('Logged out successfully');
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    }
+
     /* 우산 번호 클릭시 */
     const handleButtonClick = (number) => {
         setUmbrellaNumber(number);
@@ -128,17 +138,8 @@ function App() {
                     <p>총 대여 횟수: 3회</p>
                     <div>
                         <button onclick="window.close()">닫기</button>
-                        <button onclick="handleLogout()">로그아웃</button>
+                        <button onclick={abc}">로그아웃</button>
                     <div>
-                    <script>
-                        function handleLogout() {
-                            const confirmLogout = confirm('로그아웃 하시겠습니까?');
-                            if(confirmLogout) {
-                                alert('로그아웃 되었습니다!');
-                                window.close();
-                            }
-                        }
-                    </script>
                 </body>
             </html>
         `);
@@ -149,6 +150,7 @@ function App() {
         async function handleLogin() {
             try {
               await signInWithRedirect(); // Hosted UI로 리디렉션
+              fetchUser();
             } catch (error) {
               console.error('Error during login:', error);
             }
@@ -186,7 +188,6 @@ function App() {
             }
         }
         handleLogin();
-        fetchUser();
         fetchWeather();
     }, []);
 
