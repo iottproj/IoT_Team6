@@ -150,7 +150,7 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-        /*
+        
         Hub.listen('auth', ({ payload }) => {
             switch (payload.event) {
               case 'signInWithRedirect_failure':
@@ -162,9 +162,9 @@ function App() {
                 break;
             }
           });
-        */
+        
         handleLogin();
-        fetchUser();
+        //fetchUser();
         fetchWeather();
         
         
@@ -229,7 +229,7 @@ function App() {
             </div>
             <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
                 <h2>프로필 정보</h2>
-                <h2> 로그인 이메일 : {userInfo.email}</h2>
+                <h2> 로그인 이메일 : {userInfo ? userInfo.email : '이메일을 불러오는 중...'}</h2>
                 <p>총 대여 횟수: 3회</p>
                  <div className="profile-buttons">
                        <button onClick={toggleProfile}>닫기</button>
@@ -237,7 +237,8 @@ function App() {
                           const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
                           if (confirmLogout) {
                                alert('로그아웃 되었습니다!');
-                               toggleProfile(); // 로그아웃 후 슬라이드 닫기
+                               handleLogout();
+                               //toggleProfile(); // 로그아웃 후 슬라이드 닫기
                           }
                       }}>
                            로그아웃
