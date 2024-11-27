@@ -150,7 +150,7 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-        
+        /*
         Hub.listen('auth', ({ payload }) => {
             switch (payload.event) {
               case 'signInWithRedirect_failure':
@@ -162,9 +162,9 @@ function App() {
                 break;
             }
           });
-        
+        */
         handleLogin();
-        //fetchUser();
+        fetchUser();
         fetchWeather();
         
         
