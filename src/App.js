@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { fetchUserAttributes, getCurrentUser } from 'aws-amplify/auth';
+import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
 import { Hub } from 'aws-amplify/utils';
@@ -111,12 +111,13 @@ function App() {
         }
         const fetchUser = async () => {
             try {
-              //const user = await fetchUserAttributes();
-              const user = await getCurrentUser();
-              console.log('getCurrentUser() returned:', user);
+              const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
+              //const user = await getCurrentUser();
+              console.log('access_token:', accessToken)
+              console.log('id_token:', idToken)
               setUserInfo({
-                username:user.username,
-                userId:user.userId
+                AccessToken:accessToken,
+                IdToken:idToken
               });
             } catch (err) {
               console.log('Error fetching user:', err);
@@ -195,8 +196,6 @@ function App() {
                         <p>현재 날씨: {weather.weather[0].description}</p>
                         <p>습도: {weather.main.humidity}%</p>
                         <p>압력: {weather.main.pressure} hPa</p>
-                        <p>email: {userInfo.username} </p>
-                        <p>ID: {userInfo.userId} </p>
                         {weather.rain && weather.rain['1h'] && (
                           <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
                         )}
