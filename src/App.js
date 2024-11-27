@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { getCurrentUser } from 'aws-amplify/auth';
+import { fetchUserAttributes } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify'
@@ -133,8 +133,8 @@ function App() {
                 </head>
                 <body>
                     <h1>프로필 정보</h1>
-                    <p>로그인 아이디: ${userInfo.username}</p>
-                    <p>로그인 아이디: ${userInfo.userId}</p>
+                    <p>로그인 아이디: {userInfo.username}</p>
+                    <p>로그인 아이디: {userInfo.userId}</p>
                     <p>총 대여 횟수: 3회</p>
                     <div>
                         <button onclick="window.close()">닫기</button>
@@ -149,7 +149,7 @@ function App() {
     useEffect(() => {
         async function fetchUser() {
             try {
-              const user = await getCurrentUser();
+              const user = await fetchUserAttributes();
               setUserInfo({
                 username: user.username,
                 userId:user.attributes.sub,
@@ -220,6 +220,8 @@ function App() {
                         <p>현재 날씨: {weather.weather[0].description}</p>
                         <p>습도: {weather.main.humidity}%</p>
                         <p>압력: {weather.main.pressure} hPa</p>
+                        <p>사용자명: {userInfo.username} </p>
+                        <p>ID: {userInfo.userId} </p>
                         {weather.rain && weather.rain['1h'] && (
                           <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
                         )}
