@@ -111,11 +111,11 @@ function App() {
         }
         const fetchUser = async () => {
             try {
-              //const user = await fetchUserAttributes();
+              //const {accessToken, IdToekn} = await fetchUserAttributes();
               const user = await getCurrentUser();
               setUserInfo({
                 username:user.username,
-                userId:user.userId
+                userId:user.attributes.email
               });
             } catch (err) {
               console.log('Error fetching user:', err);
