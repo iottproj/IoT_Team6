@@ -113,12 +113,16 @@ function App() {
             try {
               const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
               //const user = await getCurrentUser();
+              if (idToken) {
+                   const email = idToken.payload.email; // 이메일 추출
+                   console.log('User email:', email);
+
+                   setUserInfo({
+                       email, // 이메일 저장
+                   });
+              }
               console.log('access_token:', accessToken)
               console.log('id_token:', idToken)
-              setUserInfo({
-                AccessToken:accessToken,
-                IdToken:idToken
-              });
             } catch (err) {
               console.log('Error fetching user:', err);
             }
@@ -223,7 +227,7 @@ function App() {
             </div>
             <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
                 <h2>프로필 정보</h2>
-                <p>로그인 아이디: example@email.com</p>
+                <p>로그인 아이디: {userInfo.email}</p>
                 <p>총 대여 횟수: 3회</p>
                  <div className="profile-buttons">
                        <button onClick={toggleProfile}>닫기</button>
