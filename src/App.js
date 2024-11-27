@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import { getCurrentUser } from 'aws-amplify/auth';
+import awsExports from './aws-exports';
+import './App.css';
+
+Amplify.configure(awsExports); // Amplify 초기화
 
 function App() {
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);

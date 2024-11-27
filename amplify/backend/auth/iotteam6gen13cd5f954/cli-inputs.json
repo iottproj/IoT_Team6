@@ -89,12 +89,12 @@
         "verification-link"
       ]
     },
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"implicit\"],\"AllowedOAuthScopes\":[\"email\",\"openid\",\"profile\"],\"CallbackURLs\":[\"https://gen1-test.da3kn7728hj41.amplifyapp.com/\"],\"LogoutURLs\":[\"https://iotteam6gen1-dev.auth.ap-northeast-2.amazoncognito.com/login?response_type=code&client_id=4fqnca27gpaeq5r0edaf183bkb&redirect_uri=https://gen1-test.da3kn7728hj41.amplifyapp.com/\"]}",
     "verificationBucketName": "iotteam6gen13cd5f954verificationbucket",
     "parentStack": {
       "Ref": "AWS::StackId"
     },
     "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"iotteam6gen13cd5f954CustomMessage\"\n  }\n]",
-    "permissions": []
+    "permissions": [],
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"implicit\"],\"AllowedOAuthScopes\":[\"email\",\"openid\",\"profile\"],\"CallbackURLs\":[\"https://gen1-test.da3kn7728hj41.amplifyapp.com/\"],\"LogoutURLs\":[\"https://iotteam6gen1-dev.auth.ap-northeast-2.amazoncognito.com/login?response_type=token&client_id=4fqnca27gpaeq5r0edaf183bkb&redirect_uri=https://gen1-test.da3kn7728hj41.amplifyapp.com/\"]}"
   }
 }
