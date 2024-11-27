@@ -147,6 +147,18 @@ function App() {
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
+        async function fetchUser() {
+            try {
+              const user = await getCurrentUser();
+              setUserInfo({
+                username: user.username,
+                userId:user.attributes.sub,
+                email: user.attributes.email,
+              });
+            } catch (err) {
+              console.log('Error fetching user:', err);
+            }
+        }
         async function handleLogin() {
             try {
               await signInWithRedirect(); // Hosted UI로 리디렉션
@@ -175,18 +187,7 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-        async function fetchUser() {
-            try {
-              const user = await getCurrentUser();
-              setUserInfo({
-                username: user.username,
-                userId:user.attributes.sub,
-                email: user.attributes.email,
-              });
-            } catch (err) {
-              console.log('Error fetching user:', err);
-            }
-        }
+        
         handleLogin();
         fetchWeather();
     }, []);
