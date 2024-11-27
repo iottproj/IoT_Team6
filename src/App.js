@@ -7,7 +7,7 @@ function App() {
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
 
-    const currentSession = Auth.currentSession();
+    //const currentSession = Auth.currentSession();
      
     /* 우산 번호 클릭시 */
     const handleButtonClick = (number) => {
