@@ -114,7 +114,9 @@ function App() {
                 </head>
                 <body>
                     <h1>프로필 정보</h1>
-                    <p>로그인 아이디: example@email.com</p>
+                    <p>로그인 아이디: ${username}</p>
+                    <p>로그인 아이디: ${userId}</p>
+                    <p>로그인 아이디: ${signInDetails}</p>
                     <p>총 대여 횟수: 3회</p>
                     <div>
                         <button onclick="window.close()">닫기</button>
@@ -156,6 +158,17 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
+        async function fetchUser() {
+            try {
+              const { username, userId, signInDetails } = await Auth.getCurrentUser();
+              console.log(`The username: ${username}`);
+              console.log(`The userId: ${userId}`);
+              console.log(`The signInDetails: ${signInDetails}`);
+            } catch (err) {
+              console.log('Error fetching user:', err);
+            }
+          }
+        fetchUser();
         fetchWeather();
     }, []);
 
