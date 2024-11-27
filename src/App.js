@@ -3,7 +3,6 @@ import './App.css';
 import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
-import { Hub } from 'aws-amplify/utils';
 import { Amplify } from 'aws-amplify'
 import awsExports from './aws-exports';
 
@@ -116,15 +115,15 @@ function App() {
               if (idToken) {
                    const email = idToken?.payload?.email.toString(); // 이메일 추출
                    const sub = idToken?.payload?.sub.toString();
-                   console.log('sub :', sub);
+                   //console.log('sub :', sub);
 
                    setUserInfo({
                        email,
                        sub
                    });
               }
-              console.log('access_token:', accessToken)
-              console.log('id_token:', idToken)
+              //console.log('access_token:', accessToken)
+              //console.log('id_token:', idToken)
             } catch (err) {
               console.log('Error fetching user:', err);
             }
@@ -150,19 +149,7 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-        /*
-        Hub.listen('auth', ({ payload }) => {
-            switch (payload.event) {
-              case 'signInWithRedirect_failure':
-                console.error('Sign in failure:', payload.data);
-                break;
-              case 'signInWithRedirect_success':
-                console.log('Sign in success');
-                fetchUser();
-                break;
-            }
-          });
-        */
+        
         handleLogin();
         fetchUser();
         fetchWeather();
