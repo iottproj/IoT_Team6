@@ -146,8 +146,7 @@ function App() {
         async function handleLogin() {
             try {
               await signInWithRedirect({
-                provider: 'Google',
-                scopes: [email, openid, profile]
+                provider: 'Google'
               }); // Hosted UI로 리디렉션
             } catch (error) {
               console.error('Error during login:', error);
