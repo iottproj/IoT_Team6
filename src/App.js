@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { Auth } from 'aws-amplify';
 
 function App() {
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
 
+    const currentSession = Auth.currentSession();
+     
     /* 우산 번호 클릭시 */
     const handleButtonClick = (number) => {
         setUmbrellaNumber(number);
