@@ -152,7 +152,7 @@ function App() {
               console.error('Error during login:', error);
             }
         }
-        const fetchAttributes = async () => {
+        const fetchUser = async () => {
             try {
               const user = await fetchUserAttributes();
               setUserInfo(user);
