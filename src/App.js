@@ -12,11 +12,7 @@ function App() {
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
-    const [userInfo, setUserInfo] = useState({
-        username: '',
-        userId: '',
-        signInDetails: null,
-    });
+    const [userInfo, setUserInfo] = useState(null);
      
 
     async function handleLogout() {
@@ -147,18 +143,6 @@ function App() {
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
-        async function fetchUser() {
-            try {
-              const user = await fetchUserAttributes();
-              setUserInfo({
-                username: user.username,
-                userId:user.attributes.sub,
-                email: user.attributes.email,
-              });
-            } catch (err) {
-              console.log('Error fetching user:', err);
-            }
-        }
         async function handleLogin() {
             try {
               await signInWithRedirect({
@@ -169,6 +153,15 @@ function App() {
               console.error('Error during login:', error);
             }
         }
+        const fetchAttributes = async () => {
+            try {
+              const user = await fetchUserAttributes();
+              setUserInfo(user);
+            } catch (err) {
+              console.log('Error fetching user:', err);
+            }
+        }
+        
         const fetchWeather = async () => {
             const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
             const city = 'Gyeonggi-do';
@@ -189,9 +182,10 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
+        handleLogin();
         fetchUser();
         fetchWeather();
-        handleLogin();
+        
         
     }, []);
 
@@ -223,7 +217,7 @@ function App() {
                         <p>현재 날씨: {weather.weather[0].description}</p>
                         <p>습도: {weather.main.humidity}%</p>
                         <p>압력: {weather.main.pressure} hPa</p>
-                        <p>사용자명: {userInfo.username} </p>
+                        <p>email: {userInfo.email} </p>
                         <p>ID: {userInfo.userId} </p>
                         {weather.rain && weather.rain['1h'] && (
                           <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
