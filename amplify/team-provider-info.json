@@ -22,7 +22,7 @@
       "function": {
         "UserInfoCRUD": {
           "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
-          "s3Key": "amplify-builds/UserInfoCRUD-375069696f5a2f536953-build.zip"
+          "s3Key": "amplify-builds/UserInfoCRUD-69626939634861355242-build.zip"
         },
         "iotteam6gen13cd5f954CustomMessage": {
           "REDIRECTURL": "",

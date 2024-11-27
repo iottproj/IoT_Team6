@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { fetchUserAttributes } from 'aws-amplify/auth';
+import { fetchUserAttributes, getCurrentUser } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
+import { Hub } from 'aws-amplify/utils';
 import { Amplify } from 'aws-amplify'
 import awsExports from './aws-exports';
 
@@ -152,7 +153,8 @@ function App() {
         }
         const fetchUser = async () => {
             try {
-              const user = await fetchUserAttributes();
+              //const user = await fetchUserAttributes();
+              const user = await getCurrentUser();
               setUserInfo(user);
             } catch (err) {
               console.log('Error fetching user:', err);
@@ -179,8 +181,20 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
+
+        Hub.listen('auth', ({ payload }) => {
+            switch (payload.event) {
+              case 'signInWithRedirect_failure':
+                console.error('Sign in failure:', payload.data);
+                break;
+              case 'signInWithRedirect_success':
+                console.log('Sign in success');
+                fetchUser();
+                break;
+            }
+          });
         handleLogin();
-        fetchUser();
+        //fetchUser();
         fetchWeather();
         
         
