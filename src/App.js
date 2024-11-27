@@ -162,7 +162,6 @@ function App() {
         async function handleLogin() {
             try {
               await signInWithRedirect(); // Hosted UI로 리디렉션
-              fetchUser();
             } catch (error) {
               console.error('Error during login:', error);
             }
@@ -187,9 +186,10 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-        
-        handleLogin();
+        fetchUser();
         fetchWeather();
+        handleLogin();
+        
     }, []);
 
     /* 도시 이름 한글 출력 */
