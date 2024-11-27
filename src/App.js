@@ -214,8 +214,8 @@ function App() {
                         <p>현재 날씨: {weather.weather[0].description}</p>
                         <p>습도: {weather.main.humidity}%</p>
                         <p>압력: {weather.main.pressure} hPa</p>
-                        <p>email: {userInfo.email} </p>
-                        <p>ID: {userInfo.userId} </p>
+                        <p>email: {userInfo} </p>
+                        <p>ID: {userInfo} </p>
                         {weather.rain && weather.rain['1h'] && (
                           <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
                         )}
