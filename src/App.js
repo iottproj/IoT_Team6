@@ -115,10 +115,12 @@ function App() {
               //const user = await getCurrentUser();
               if (idToken) {
                    const email = idToken?.payload?.email.toString(); // 이메일 추출
-                   console.log('User email:', email);
+                   const sub = idToken?.payload?.sub.toString();
+                   console.log('sub :', sub);
 
                    setUserInfo({
-                       email, // 이메일 저장
+                       email,
+                       sub
                    });
               }
               console.log('access_token:', accessToken)
@@ -227,7 +229,7 @@ function App() {
             </div>
             <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
                 <h2>프로필 정보</h2>
-                
+                <h2> 로그인 이메일 : {userInfo.email}</h2>
                 <p>총 대여 횟수: 3회</p>
                  <div className="profile-buttons">
                        <button onClick={toggleProfile}>닫기</button>
