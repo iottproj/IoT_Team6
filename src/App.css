@@ -9,40 +9,47 @@ body, .App {
 
 /* 타이틀 */
 .title {
-  font-size: 1.5rem; /* 타이틀 크기 조정 */
+  font-size: 1.5rem;
   color: rgb(82, 115, 148);
-  margin: 10px 0; /* 여백 추가 */
+  margin: 10px 0;
 }
 
 /* 설명 텍스트 */
 .description {
-  font-size: 0.9rem; /* 텍스트 크기 줄임 */
+  font-size: 0.9rem;
+  color: rgb(108, 167, 174);
+  margin-bottom: 15px;
+}
+/* 설명 텍스트 */
+.description1 {
+  font-size: 0.9rem;
   color: rgb(108, 167, 174);
   margin-bottom: 15px;
 }
 
+
 /* 날씨 정보 */
 .weather-info h2 {
-  font-size: 1rem; /* 위치 텍스트 크기 줄임 */
+  font-size: 1rem;
   color: rgb(82, 115, 148);
 }
 .weather-details {
   display: flex;
-  flex-wrap: wrap; /* 줄바꿈 허용 */
-  justify-content: center; /* 중앙 정렬 */
-  gap: 10px; /* 각 항목 간 여백 */
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
 }
 .weather-details p {
   margin: 0;
-  font-size: 0.9rem; /* 날씨 정보 텍스트 크기 줄임 */
-  line-height: 1.4; /* 텍스트 간격 조정 */
+  font-size: 0.9rem;
+  line-height: 1.4;
 }
 
 /* 우산 번호 버튼 */
 .umbrella-buttons {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 5개씩 나란히 */
-  gap: 8px; /* 버튼 간 여백 */
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
   margin: 20px 0;
   padding: 10px;
   background-color: rgb(234, 238, 236);
@@ -50,9 +57,9 @@ body, .App {
   border-radius: 15px;
 }
 .umbrella-button {
-  width: 50px; /* 버튼 크기 줄임 */
+  width: 50px;
   height: 50px;
-  font-size: 0.8rem; /* 텍스트 크기 줄임 */
+  font-size: 0.8rem;
   border: 2px solid rgb(108, 167, 174);
   border-radius: 50%;
   background-color: transparent;
@@ -67,15 +74,14 @@ body, .App {
   color: red;
 }
 
-
 /* 프로필 버튼 */
 .profile-button {
   position: absolute;
-  top: 10px; /* 상단 여백 조정 */
+  top: 10px;
   left: 10px;
-  width: 40px; /* 크기 줄임 */
+  width: 40px;
   height: 40px;
-  background-image: url('/public/iconimage.png'); /* 경로 */
+  background-image: url('/public/iconimage.png');
   background-size: cover;
   background-position: center;
   border: none;
@@ -96,6 +102,7 @@ body, .App {
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 /* 각 버튼의 공통 스타일 */
 .button-grid button {
   padding: 10px 20px;
@@ -109,16 +116,76 @@ body, .App {
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
 /* 버튼 호버 효과 */
 .button-grid button:hover {
   background-color: rgb(72, 105, 138);
   transform: scale(1.05);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 /* 반응형 디자인 */
 @media (max-width: 600px) {
   .button-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
+}
+
+.profile-slide {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background-color: rgb(234, 238, 236);
+    box-shadow: 5px 0 5px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s ease-in-out;
+    padding: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-slide.open {
+    left: 0;
+}
+
+.profile-slide h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+}
+
+.profile-slide button {
+    padding: 10px;
+    background-color: #6ca7ae;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-slide button:hover {
+    background-color: #48698a;
+}
+
+.profile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 버튼 간격 추가 */
+    margin-top: 20px; /* 버튼 그룹 위쪽 간격 */
+}
+
+.profile-buttons button {
+    padding: 10px;
+    background-color: #6ca7ae;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.profile-buttons button:hover {
+    background-color: #48698a;
 }

@@ -14,6 +14,7 @@ function App() {
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
     const [userInfo, setUserInfo] = useState(null);
+    const [isProfileOpen, setIsProfileOpen] = useState(false)
      
 
     async function handleLogout() {
@@ -99,49 +100,6 @@ function App() {
         `);
     };
 
-    /* 프로필 버튼 클릭시 새로운 윈도우 생성 */
-    const handleOpenProfile = () => {
-        const profileWindow = window.open('', '프로필', 'width=400,height=300');
-        profileWindow.document.write(`
-            <html>
-                <head>
-                    <title>프로필</title>
-                    <style>
-                        body {
-                            font-family: Arial, sans-serif;
-                            text-align: center;
-                            padding: 20px;
-                            background-color: rgb(234, 238, 236);
-                        }
-                        button {
-                            padding: 10px 20px;
-                            font-size: 1rem;
-                            background-color: rgb(108, 167, 174);
-                            color: white;
-                            border: none;
-                            border-radius: 5px;
-                            cursor: pointer;
-                            margin-top: 20px;
-                        }
-                        button:hover {
-                            background-color: rgb(72, 105, 138);
-                        }
-                    </style>
-                </head>
-                <body>
-                    <h1>프로필 정보</h1>
-                    <p>로그인 아이디: {userInfo.username}</p>
-                    <p>로그인 아이디: {userInfo.userId}</p>
-                    <p>총 대여 횟수: 3회</p>
-                    <div>
-                        <button onclick="window.close()">닫기</button>
-                        <button onclick={abc}">로그아웃</button>
-                    <div>
-                </body>
-            </html>
-        `);
-    };
-
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         async function handleLogin() {
@@ -211,10 +169,14 @@ function App() {
         }
     };
 
+    const toggleProfile = () => {
+            setIsProfileOpen((prevState) => !prevState);
+    };
+
     return (
         <div className="App">
             {/* 프로필 버튼 */}
-            <button className="profile-button" onClick={handleOpenProfile}></button>
+            <button className="profile-button" onClick={toggleProfile}></button>
 
             <h1 className="title">무인 우산 대여 서비스</h1>
             <p className="description">우산이 필요하신가요? 편하게 우산을 빌려보세요.</p>
@@ -254,6 +216,23 @@ function App() {
                 <button onClick={handleReturnClick}>반납하기</button>
                 <button onClick={handleOpenInstructions}>사용 방법</button>
                 <button onClick={handleExtendBorrowClick}>대여 연장하기</button>
+            </div>
+            <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
+                <h2>프로필 정보</h2>
+                <p>로그인 아이디: example@email.com</p>
+                <p>총 대여 횟수: 3회</p>
+                 <div className="profile-buttons">
+                       <button onClick={toggleProfile}>닫기</button>
+                        <button onClick={() => {
+                          const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
+                          if (confirmLogout) {
+                               alert('로그아웃 되었습니다!');
+                               toggleProfile(); // 로그아웃 후 슬라이드 닫기
+                          }
+                      }}>
+                           로그아웃
+                     </button>
+                </div>
             </div>
         </div>
     );
