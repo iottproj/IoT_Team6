@@ -8,8 +8,6 @@ backend:
         - pip3 install virtualenv
         - export PATH=$PATH:/root/.local/bin
         - amplify --version
-        - amplify pull --appId da3kn7728hj41 --envName dev
-        - amplify push
 frontend:
   phases:
     preBuild:
