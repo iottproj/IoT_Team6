@@ -210,12 +210,10 @@ function App() {
                        email,
                        sub
                     });
-                    console.log('origin_sub:', sub);
+                    /*console.log('origin_sub:', sub);
                     console.log('origin_email:', email);
                     console.log('sub:', userInfo.sub);
-                    console.log('email:', userInfo.email);
-                    
-                    await postinfo();
+                    console.log('email:', userInfo.email);*/
                 }
               console.log('대여횟수:', userInfo.Bcnt)
               //console.log('access_token:', accessToken)
@@ -248,6 +246,11 @@ function App() {
         
         handleLogin();
         fetchUser();
+
+        console.log('sub:', userInfo.sub);
+        console.log('email:', userInfo.email);
+        
+        userInfo?.sub? postinfo() : '';
         fetchWeather();
         
         
