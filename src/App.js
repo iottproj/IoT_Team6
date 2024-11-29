@@ -58,10 +58,11 @@ function App() {
         try {
           const restOperation = get({
             apiName: 'UserInfoAPI',
-            path: `/userinfo/${userInfo.sub}`,
+            path: `/userinfo/object${userInfo.sub}`,
         });
         const { body } = await restOperation.response;
         const response = await body.json();
+        /*
         setUserInfo(prevUserInfo => {
             const userInfoData = response["UserInfo"];
             return {
@@ -71,6 +72,7 @@ function App() {
                 TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
             };
         });
+        */
 
         console.log('GET call succeeded');
         console.log(response);
