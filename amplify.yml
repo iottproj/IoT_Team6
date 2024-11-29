@@ -3,11 +3,16 @@ backend:
   phases:
     build:
       commands:
-        - update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.9 15
-        - /usr/local/bin/python3.9 -m pip install --upgrade pip
-        - /usr/local/bin/pip3.9 install --user pipenv
-        - /usr/local/bin/pip3.9 install --user virtualenv
+        # use a python version globally
+        - pyenv global 3.9
+        # verify python version
+        - python --version
+        # install pipenv
+        - pip install --user pipenv
+        # add to path
         - export PATH=$PATH:/root/.local/bin
+        # verify pipenv version
+        - pipenv --version
         - amplifyPush --simple
 frontend:
   phases:
