@@ -182,6 +182,8 @@ function App() {
                        sub
                    });
               }
+              getinfo();
+              console.log('대여횟수:', userInfo.Bcnt)
               //console.log('access_token:', accessToken)
               //console.log('id_token:', idToken)
             } catch (err) {
@@ -212,9 +214,6 @@ function App() {
         
         handleLogin();
         fetchUser();
-        if(userInfo != null) {
-            getinfo();
-        }
         fetchWeather();
         
         
