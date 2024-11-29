@@ -158,39 +158,6 @@ function App() {
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
-        async function postinfo() {
-            try {
-              const restOperation = post({
-                apiName: 'UserInfoAPI',
-                path: '/getuserinfo',
-                options: {
-                  body: {
-                    sub: userInfo.sub,
-                    email: userInfo.email
-                  }
-                }
-            });
-    
-            const { body } = await restOperation.response;
-            const response = await body.json();
-            setUserInfo(prevUserInfo => {
-                const userInfoData = response["UserInfo"];
-                return {
-                    ...prevUserInfo,
-                    Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
-                    Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
-                    userId: userInfoData.userId ? userInfoData.userId.S : '',
-                    TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
-                };
-            });
-    
-            console.log('POST call succeeded');
-            console.log(response);
-            } catch (e) {
-                console.log('POST call failed: ', e.response ? e.response.body : e);
-            }
-        }
-
         async function handleLogin() {
             try {
               await signInWithRedirect(); // Hosted UI로 리디렉션
@@ -246,11 +213,6 @@ function App() {
         
         handleLogin();
         fetchUser();
-
-        console.log('sub:', userInfo.sub);
-        console.log('email:', userInfo.email);
-        
-        userInfo?.sub? postinfo() : '';
         fetchWeather();
         
         
@@ -270,6 +232,46 @@ function App() {
     const toggleProfile = () => {
             setIsProfileOpen((prevState) => !prevState);
     };
+    useEffect(() => {
+        async function postinfo() {
+            try {
+              const restOperation = post({
+                apiName: 'UserInfoAPI',
+                path: '/getuserinfo',
+                options: {
+                  body: {
+                    sub: userInfo.sub,
+                    email: userInfo.email
+                  }
+                }
+            });
+    
+            const { body } = await restOperation.response;
+            const response = await body.json();
+            setUserInfo(prevUserInfo => {
+                const userInfoData = response["UserInfo"];
+                return {
+                    ...prevUserInfo,
+                    Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
+                    Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
+                    userId: userInfoData.userId ? userInfoData.userId.S : '',
+                    TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
+                };
+            });
+    
+            console.log('POST call succeeded');
+            console.log(response);
+            } catch (e) {
+                console.log('POST call failed: ', e.response ? e.response.body : e);
+            }
+        }
+
+        if (userInfo?.sub) {
+          console.log('sub:', userInfo.sub);
+          console.log('email:', userInfo.email);
+          postinfo();
+        }
+      }, [userInfo]);
 
     return (
         <div className="App">
