@@ -58,7 +58,7 @@ function App() {
         try {
           const restOperation = get({
             apiName: 'UserInfoAPI',
-            path: '/userinfo/' + userInfo.sub,
+            path: `/userinfo/${userInfo.sub}`,
         });
         const { body } = await restOperation.response;
         const response = await body.json();
@@ -68,7 +68,6 @@ function App() {
                 ...prevUserInfo,
                 Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
                 Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
-                userId: userInfoData.userId ? userInfoData.userId.S : '',
                 TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
             };
         });
@@ -76,7 +75,7 @@ function App() {
         console.log('GET call succeeded');
         console.log(response);
         } catch (e) {
-            console.log('GET call failed: ', e.response ? e.response.body : e);
+            console.log('GET call failed: ', e.response ? JSON.parse(e.response.body) : e);
         }
     }
 
@@ -269,7 +268,7 @@ function App() {
         if (userInfo?.sub) {
           console.log('sub:', userInfo.sub);
           console.log('email:', userInfo.email);
-          postinfo();
+          getinfowtempl();
         }
       }, [userInfo]);
 
