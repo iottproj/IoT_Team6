@@ -236,7 +236,7 @@ function App() {
     const toggleProfile = () => {
             setIsProfileOpen((prevState) => !prevState);
     };
-    
+    /*
     useEffect(() => {
         async function postinfo() {
             try {
@@ -277,7 +277,7 @@ function App() {
           getinfowtempl();
         }
       }, [userInfo]);
-
+      */
     return (
         <div className="App">
             {/* 프로필 버튼 */}
