@@ -206,10 +206,12 @@ function App() {
                    const sub = idToken?.payload?.sub.toString();
                    //console.log('sub :', sub);
 
-                    await setUserInfo({
+                    setUserInfo({
                        email,
                        sub
                     });
+                    console.log('origin_sub:', sub);
+                    console.log('origin_email:', email);
                     console.log('sub:', userInfo.sub);
                     console.log('email:', userInfo.email);
                     
