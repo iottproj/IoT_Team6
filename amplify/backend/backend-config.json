@@ -8,7 +8,15 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "UserInfoCRUD"
+          "resourceName": "UserInfoCRUDPY"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "UmbTransaction"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -60,6 +68,11 @@
     }
   },
   "function": {
+    "UmbTransaction": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "UserInfoCRUD": {
       "build": true,
       "dependsOn": [
@@ -76,6 +89,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "UserInfoCRUDPY": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "iotteam6gen13cd5f954CustomMessage": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -88,6 +106,38 @@
         {
           "category": "auth",
           "resourceName": "iotteam6gen13cd5f954"
+        }
+      ]
+    },
+    "AMPLIFY_function_UmbTransaction_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UmbTransaction"
+        }
+      ]
+    },
+    "AMPLIFY_function_UmbTransaction_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UmbTransaction"
+        }
+      ]
+    },
+    "AMPLIFY_function_UserInfoCRUDPY_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UserInfoCRUDPY"
+        }
+      ]
+    },
+    "AMPLIFY_function_UserInfoCRUDPY_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "UserInfoCRUDPY"
         }
       ]
     },

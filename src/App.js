@@ -4,6 +4,8 @@ import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify'
+import { post } from 'aws-amplify/api';
+
 import awsExports from './aws-exports';
 
 Amplify.configure(awsExports); // Amplify 초기화
@@ -22,6 +24,65 @@ function App() {
             console.log('Logged out successfully');
         } catch (error) {
             console.error('Error during logout:', error);
+        }
+    }
+
+    async function getinfo() {
+        try {
+          const restOperation = get({
+            apiName: 'UserInfoAPI',
+            path: '/getuserinfo',
+        });
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        setUserInfo(prevUserInfo => {
+            const userInfoData = response["UserInfo"];
+            return {
+                ...prevUserInfo,
+                Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
+                Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
+                userId: userInfoData.userId ? userInfoData.userId.S : '',
+                TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
+            };
+        });
+
+        console.log('GET call succeeded');
+        console.log(response);
+        } catch (e) {
+            console.log('GET call failed: ', e.response ? e.response.body : e);
+        }
+    }
+
+    async function postinfo() {
+        try {
+          const restOperation = post({
+            apiName: 'UserInfoAPI',
+            path: '/getuserinfo',
+            options: {
+              body: {
+                sub: userInfo.sub,
+                email: userInfo.email
+              }
+            }
+        });
+
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        setUserInfo(prevUserInfo => {
+            const userInfoData = response["UserInfo"];
+            return {
+                ...prevUserInfo,
+                Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
+                Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
+                userId: userInfoData.userId ? userInfoData.userId.S : '',
+                TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
+            };
+        });
+
+        console.log('POST call succeeded');
+        console.log(response);
+        } catch (e) {
+            console.log('POST call failed: ', e.response ? e.response.body : e);
         }
     }
 
@@ -152,6 +213,9 @@ function App() {
         
         handleLogin();
         fetchUser();
+        if(userInfo != null) {
+            getinfo();
+        }
         fetchWeather();
         
         
@@ -217,7 +281,7 @@ function App() {
             <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
                 <h2>프로필 정보</h2>
                 <h2> 이메일 : {userInfo ? userInfo.email : '이메일을 불러오는 중...'}</h2>
-                <p>총 대여 횟수: 3회</p>
+                <p>총 대여 횟수: {userInfo ? '${userInfo.Bcnt} + 회' : '대여 횟수 불러오는 중...'}</p>
                  <div className="profile-buttons">
                        <button onClick={toggleProfile}>닫기</button>
                         <button onClick={() => {
