@@ -62,18 +62,24 @@ function App() {
         });
         const { body } = await restOperation.response;
         const response = await body.json();
-        /*
-        setUserInfo(prevUserInfo => {
-            const userInfoData = response["UserInfo"];
-            return {
-                ...prevUserInfo,
-                Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
-                Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
-                TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
-            };
-        });
-        */
 
+        // 응답이 비어있거나 예상치 못한 형식일 경우를 대비한 예외 처리
+        if (!response || typeof response !== 'object') {
+            throw new Error('Invalid response format');
+        }
+
+        // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
+        const Bcnt = response.Bcnt ?? 0;
+        const Bcurrent = response.Bcurrent ?? false;
+        const TTL = response.TTL ?? 0;
+        
+        setUserInfo(prevUserInfo => ({
+            ...prevUserInfo,
+            Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
+            Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
+            TTL: typeof TTL === 'number' ? TTL : 0
+        }));
+        
         console.log('GET call succeeded');
         console.log(response);
         } catch (e) {
@@ -183,7 +189,6 @@ function App() {
                     console.log('sub:', userInfo.sub);
                     console.log('email:', userInfo.email);*/
                 }
-              console.log('대여횟수:', userInfo.Bcnt)
               //console.log('access_token:', accessToken)
               //console.log('id_token:', idToken)
             } catch (err) {
@@ -215,8 +220,6 @@ function App() {
         handleLogin();
         fetchUser();
         fetchWeather();
-        
-        
     }, []);
 
     /* 도시 이름 한글 출력 */
@@ -233,6 +236,7 @@ function App() {
     const toggleProfile = () => {
             setIsProfileOpen((prevState) => !prevState);
     };
+    
     useEffect(() => {
         async function postinfo() {
             try {
