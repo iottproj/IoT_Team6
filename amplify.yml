@@ -1,0 +1,27 @@
+version: 1
+backend:
+  phases:
+    build:
+      commands:
+        - pip3 install --upgrade pip
+        - pip3 install --user pipenv
+        - pip3 install virtualenv
+        - export PATH=$PATH:/root/.local/bin
+        - amplify --version
+        - amplify pull --appId da3kn7728hj41 --envName dev
+        - amplify push
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - npm ci
+    build:
+      commands:
+        - npm run build
+  artifacts:
+    baseDirectory: build
+    files:
+      - '**/*'
+  cache:
+    paths:
+      - node_modules/**/*
