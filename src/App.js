@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
+import { fetchAuthSession } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify'
-import { post } from 'aws-amplify/api';
+import { post, get } from 'aws-amplify/api';
 
 import awsExports from './aws-exports';
 
@@ -172,7 +172,6 @@ function App() {
         const fetchUser = async () => {
             try {
               const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
-              //const user = await getCurrentUser();
               if (idToken) {
                    const email = idToken?.payload?.email.toString(); // 이메일 추출
                    const sub = idToken?.payload?.sub.toString();
