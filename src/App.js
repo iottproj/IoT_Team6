@@ -280,7 +280,7 @@ function App() {
             <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
                 <h2>프로필 정보</h2>
                 <h2> 이메일 : {userInfo ? userInfo.email : '이메일을 불러오는 중...'}</h2>
-                <p>총 대여 횟수: {userInfo ? '${userInfo.Bcnt}회' : '대여 횟수 불러오는 중...'}</p>
+                <p>총 대여 횟수: {userInfo ? `${userInfo.Bcnt}회` : '대여 횟수 불러오는 중...'}</p>
                  <div className="profile-buttons">
                        <button onClick={toggleProfile}>닫기</button>
                         <button onClick={() => {
