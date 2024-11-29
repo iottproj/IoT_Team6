@@ -204,12 +204,12 @@ function App() {
                    const sub = idToken?.payload?.sub.toString();
                    //console.log('sub :', sub);
 
-                   setUserInfo({
+                    await setUserInfo({
                        email,
                        sub
-                   });
-              }
-              postinfo();
+                    });
+            }
+            await postinfo();
               console.log('대여횟수:', userInfo.Bcnt)
               //console.log('access_token:', accessToken)
               //console.log('id_token:', idToken)
@@ -305,8 +305,8 @@ function App() {
             </div>
             <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
                 <h2>프로필 정보</h2>
-                <h2> 이메일 : {userInfo ? userInfo.email : '이메일을 불러오는 중...'}</h2>
-                <p>총 대여 횟수: {userInfo ? `${userInfo.Bcnt}회` : '대여 횟수 불러오는 중...'}</p>
+                <h2> 이메일 : {userInfo.email ? userInfo.email : '이메일을 불러오는 중...'}</h2>
+                <p>총 대여 횟수: {userInfo.Bcnt ? `${userInfo.Bcnt}회` : '대여 횟수 불러오는 중...'}</p>
                  <div className="profile-buttons">
                        <button onClick={toggleProfile}>닫기</button>
                         <button onClick={() => {
