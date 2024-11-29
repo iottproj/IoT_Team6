@@ -282,7 +282,7 @@ function App() {
       console.log('Bcnt debug: ', userInfo?.Bcnt);
       console.log('Bcurrent debug: ', userInfo?.Bcurrent);
       console.log('TTL debug: ', userInfo?.TTL);
-      console.log('Flag debug: ', userInfo.isLoaded);
+      console.log('Flag debug: ', userInfo?.isLoaded);
     return (
         <div className="App">
             {/* 프로필 버튼 */}
