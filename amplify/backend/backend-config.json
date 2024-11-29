@@ -136,6 +136,22 @@
         }
       ]
     },
+    "AMPLIFY_function_CRUDDB_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CRUDDB"
+        }
+      ]
+    },
+    "AMPLIFY_function_CRUDDB_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "CRUDDB"
+        }
+      ]
+    },
     "AMPLIFY_function_UmbTransaction_deploymentBucketName": {
       "usedBy": [
         {

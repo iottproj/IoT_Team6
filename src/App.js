@@ -27,7 +27,7 @@ function App() {
             console.error('Error during logout:', error);
         }
     }
-
+    /*
     async function getinfo() {
         try {
           const restOperation = get({
@@ -53,7 +53,7 @@ function App() {
             console.log('GET call failed: ', e.response ? e.response.body : e);
         }
     }
-
+    */
     async function getinfowtempl() {
         try {
           const restOperation = get({
@@ -209,7 +209,7 @@ function App() {
                        sub
                    });
               }
-              getinfo();
+              postinfo();
               console.log('대여횟수:', userInfo.Bcnt)
               //console.log('access_token:', accessToken)
               //console.log('id_token:', idToken)

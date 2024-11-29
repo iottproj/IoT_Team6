@@ -21,6 +21,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "CRUDDB": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "UmbTransaction": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
