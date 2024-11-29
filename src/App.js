@@ -58,7 +58,7 @@ function App() {
         try {
           const restOperation = get({
             apiName: 'UserInfoAPI',
-            path: `/userinfo/object${userInfo.sub}`,
+            path: `/userinfo/object/${userInfo.sub}`,
         });
         const { body } = await restOperation.response;
         const response = await body.json();
