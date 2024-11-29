@@ -3,12 +3,12 @@ backend:
   phases:
     build:
       commands:
-        - pip3 install --upgrade pip
-        - pip3 install --user pipenv
-        - pip3 install virtualenv
+        - update-alternatives --install /usr/bin/python3 python3 /usr/local/bin/python3.9 15
+        - /usr/local/bin/python3.9 -m pip install --upgrade pip
+        - /usr/local/bin/pip3.9 install --user pipenv
+        - /usr/local/bin/pip3.9 install --user virtualenv
         - export PATH=$PATH:/root/.local/bin
-        - amplify --version
-        - amplify pull --appId da3kn7728hj41 --envName dev
+        - amplifyPush --simple
 frontend:
   phases:
     preBuild:
