@@ -17,6 +17,14 @@
           ],
           "category": "function",
           "resourceName": "UmbTransaction"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "CRUDDB"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -68,6 +76,25 @@
     }
   },
   "function": {
+    "CRUDDB": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributeEnvMap": {
+            "Arn": "TABLE_ARN",
+            "Name": "TABLE_NAME"
+          },
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "storage",
+          "resourceName": "UserInfoDB"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "UmbTransaction": {
       "build": true,
       "providerPlugin": "awscloudformation",

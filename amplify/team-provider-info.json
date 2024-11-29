@@ -38,7 +38,8 @@
         "UmbTransaction": {
           "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
           "s3Key": "amplify-builds/UmbTransaction-4238377a5a6c725a3545-build.zip"
-        }
+        },
+        "CRUDDB": {}
       },
       "storage": {
         "UserInfoDB": {}

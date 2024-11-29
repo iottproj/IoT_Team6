@@ -5,10 +5,11 @@ import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
 import { Amplify } from 'aws-amplify'
 import { post, get } from 'aws-amplify/api';
-
+import amplifyconfig from './amplifyconfiguration.json';
 import awsExports from './aws-exports';
 
 Amplify.configure(awsExports); // Amplify 초기화
+Amplify.configure(amplifyconfig);
 
 function App() {
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
@@ -32,6 +33,32 @@ function App() {
           const restOperation = get({
             apiName: 'UserInfoAPI',
             path: '/getuserinfo',
+        });
+        const { body } = await restOperation.response;
+        const response = await body.json();
+        setUserInfo(prevUserInfo => {
+            const userInfoData = response["UserInfo"];
+            return {
+                ...prevUserInfo,
+                Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
+                Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
+                userId: userInfoData.userId ? userInfoData.userId.S : '',
+                TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
+            };
+        });
+
+        console.log('GET call succeeded');
+        console.log(response);
+        } catch (e) {
+            console.log('GET call failed: ', e.response ? e.response.body : e);
+        }
+    }
+
+    async function getinfowtempl() {
+        try {
+          const restOperation = get({
+            apiName: 'UserInfoAPI',
+            path: '/userinfo/' + userInfo.sub,
         });
         const { body } = await restOperation.response;
         const response = await body.json();
