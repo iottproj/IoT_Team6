@@ -77,7 +77,8 @@ function App() {
             ...prevUserInfo,
             Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
             Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
-            TTL: typeof TTL === 'number' ? TTL : 0
+            TTL: typeof TTL === 'number' ? TTL : 0,
+            isLoaded: true  //로딩 완료여부 플래그
         }));
         
         console.log('GET call succeeded');
@@ -236,8 +237,9 @@ function App() {
     const toggleProfile = () => {
             setIsProfileOpen((prevState) => !prevState);
     };
-    /*
+    
     useEffect(() => {
+        /*
         async function postinfo() {
             try {
               const restOperation = post({
@@ -263,21 +265,21 @@ function App() {
                     TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
                 };
             });
-    
+            
             console.log('POST call succeeded');
             console.log(response);
             } catch (e) {
                 console.log('POST call failed: ', e.response ? e.response.body : e);
             }
-        }
+        }*/
 
-        if (userInfo?.sub) {
+        if (userInfo?.sub && !userInfo?.isLoaded) {
           console.log('sub:', userInfo.sub);
           console.log('email:', userInfo.email);
           getinfowtempl();
         }
-      }, [userInfo]);
-      */
+      }, [userInfo?.sub, userInfo?.isLoaded]);
+      
     return (
         <div className="App">
             {/* 프로필 버튼 */}
