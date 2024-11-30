@@ -125,28 +125,37 @@ function App() {
                         Bcnt: 0,
                         Bcurrent: false,
                         ExtRent: false,     //기간연장 요청여부 플래그
-                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일
+                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일, 초(sec) 단위
                     }
                     break;
                 case 1:     //대여요청
                     bodydata = {
-                        userId:  userInfo.sub,
-                        Bcnt: userInfo.Bcnt + 1,
-                        Bcurrent: true
+                        userId: userInfo.sub,
+                        email: userInfo.email,
+                        Bcnt: userInfo.Bcnt,
+                        Bcurrent: userInfo.Bcurrent,
+                        ExtRent: userInfo.ExtRent,     //기간연장 요청여부 플래그
+                        TTL: userInfo.TTL // TTL
                     }
                     break;
                 case 2:     //반납요청
                     bodydata = {
                         userId: userInfo.sub,
-                        Bcurrent: false,
-                        ExtRent: false      //기간연장 요청여부 플래그
+                        email: userInfo.email,
+                        Bcnt: userInfo.Bcnt,
+                        Bcurrent: userInfo.Bcurrent,
+                        ExtRent: userInfo.ExtRent,     //기간연장 요청여부 플래그
+                        TTL: userInfo.TTL // TTL
                     }
                     break;
                 case 3:     //연장요청
                     bodydata = {
                         userId: userInfo.sub,
-                        ExtRent:  true,
-                        TTL: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString() // 현재 TTL + 24시간
+                        email: userInfo.email,
+                        Bcnt: userInfo.Bcnt,
+                        Bcurrent: userInfo.Bcurrent,
+                        ExtRent: userInfo.ExtRent,     //기간연장 요청여부 플래그
+                        TTL: (parseInt(userInfo.TTL) + (24*60*60)).toString() // TTL + 1일, 초(sec) 단위
                     }
                     break;
                 default:
