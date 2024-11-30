@@ -83,7 +83,7 @@ function App() {
             const response = await body.json();
 
             // 응답이 비어있거나 예상치 못한 형식일 경우를 대비한 예외 처리
-            if (!response || typeof response !== 'object') {
+            if (!response || typeof response !== 'object' || !response.userId) {
                 console.log('No user info');
                 await postinfotempl(0);
                 await getinfowtempl();
@@ -265,6 +265,7 @@ function App() {
               console.error('Error during login:', error);
             }
         }
+
         const fetchUser = async () => {
             try {
               const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
@@ -469,9 +470,9 @@ function App() {
         }*/
 
         if (userInfo?.sub && !userInfo?.isLoaded) {
-          console.log('sub:', userInfo.sub);
-          console.log('email:', userInfo.email);
-          getinfowtempl();
+            console.log('sub:', userInfo.sub);
+            console.log('email:', userInfo.email);
+            getinfowtempl();
         }
       }, [userInfo?.sub, userInfo?.isLoaded]);
       console.log('Bcnt debug: ', userInfo?.Bcnt);
