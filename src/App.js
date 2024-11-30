@@ -154,16 +154,19 @@ function App() {
 
             const { body } = await restOperation.response;
             const response = await body.json();
-            setUserInfo(prevUserInfo => {
-                const userInfoData = response["UserInfo"];
-                return {
-                    ...prevUserInfo,
-                    Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
-                    Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
-                    userId: userInfoData.userId ? userInfoData.userId.S : '',
-                    TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
-                };
-            });
+
+            // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
+            const Bcnt = response.Bcnt ?? 0;
+            const Bcurrent = response.Bcurrent ?? false;
+            const TTL = response.TTL ?? '0';
+            
+            setUserInfo(prevUserInfo => ({
+                ...prevUserInfo,
+                Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
+                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
+                TTL: typeof TTL === 'number' ? TTL : 0,
+                isLoaded: true  //로딩 완료여부 플래그
+            }));
             
             console.log('POST call succeeded');
             console.log(response);
