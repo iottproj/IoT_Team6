@@ -93,16 +93,17 @@ function App() {
 
             // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
             const Bcnt = response.Bcnt ?? 0;
-            const Bcurrent = response.Bcurrent ?? false;
+            const Bcurrent = response.Bcurrent ?? true;
             const TTL = response.TTL ?? '0';
-            
+            const ExtRent = response.ExtRent ?? true;
+
             setUserInfo(prevUserInfo => ({
                 ...prevUserInfo,
                 Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
-                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
-                TTL: typeof TTL === 'number' ? TTL : 0,
+                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : true,
+                TTL: typeof TTL === 'string' ? TTL : 0,
                 isLoaded: true,     //로딩 완료여부 플래그
-                isExtRent: false    //기간연장 요청여부 플래그
+                isExtRent: typeof ExtRent === 'boolean' ? ExtRent : true   //기간연장 요청여부 플래그
             }));
             
             console.log('GET call succeeded');
@@ -119,33 +120,33 @@ function App() {
             switch(callnum) {
                 case 0:     //사용자 최초 이용시
                     bodydata = {
-                        userId: userInfo.sub,
-                        email: userInfo.email,
-                        Bcnt: 0,
-                        Bcurrent: false,
-                        ExtRent: false,     //기간연장 요청여부 플래그
-                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일
+                        userId: {S: userInfo.sub},
+                        email: {S: userInfo.email},
+                        Bcnt: {N: 0},
+                        Bcurrent: {BOOL: false},
+                        ExtRent: {BOOL: false},     //기간연장 요청여부 플래그
+                        TTL: {S: (currentTime + (3 * 24 * 60 * 60)).toString()} // 현재 시간 + 3일
                     }
                     break;
                 case 1:     //대여요청
                     bodydata = {
-                        userId: userInfo.sub,
-                        Bcnt: userInfo.Bcnt + 1,
-                        Bcurrent: true
+                        userId: {S: userInfo.sub},
+                        Bcnt: {N: userInfo.Bcnt + 1},
+                        Bcurrent: {BOOL: true}
                     }
                     break;
                 case 2:     //반납요청
                     bodydata = {
-                        userId: userInfo.sub,
-                        Bcurrent: false,
-                        ExtRent: false      //기간연장 요청여부 플래그
+                        userId: {S: userInfo.sub},
+                        Bcurrent: {BOOL: false},
+                        ExtRent: {BOOL: false}      //기간연장 요청여부 플래그
                     }
                     break;
                 case 3:     //연장요청
                     bodydata = {
-                        userId: userInfo.sub,
-                        ExtRent: true,
-                        TTL: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString() // 현재 TTL + 24시간
+                        userId: {S: userInfo.sub},
+                        ExtRent: {BOOL: true},
+                        TTL: {S: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString()} // 현재 TTL + 24시간
                     }
                     break;
                 default:
@@ -164,16 +165,17 @@ function App() {
 
             // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
             const Bcnt = response.Bcnt ?? 0;
-            const Bcurrent = response.Bcurrent ?? false;
+            const Bcurrent = response.Bcurrent ?? true;
             const TTL = response.TTL ?? '0';
+            const ExtRent = response.ExtRent ?? true;
             
             setUserInfo(prevUserInfo => ({
                 ...prevUserInfo,
                 Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
-                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
-                TTL: typeof TTL === 'number' ? TTL : 0,
+                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : true,
+                TTL: typeof TTL === 'string' ? TTL : 0,
                 isLoaded: true,     //로딩 완료여부 플래그
-                isExtRent: false    //기간연장 요청여부 플래그
+                isExtRent: typeof ExtRent === 'boolean' ? ExtRent : true    //기간연장 요청여부 플래그
             }));
             
             console.log('POST call succeeded');
@@ -509,7 +511,7 @@ function App() {
             console.log('Rent Event!')
             getinfowtempl();
         }
-    }, [userInfo?.Bcurrent || userInfo.isExtRent])
+    }, [userInfo?.Bcurrent || userInfo?.isExtRent])
 
     console.log('Bcnt debug: ', userInfo?.Bcnt);
     console.log('Bcurrent debug: ', userInfo?.Bcurrent);
