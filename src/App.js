@@ -138,11 +138,10 @@ function App() {
                     }
                     break;
                 case 1:     //대여요청
-                    new_Bcnt = userInfo.Bcnt + 1
                     bodydata = {
                         userId: userInfo.sub,
                         email: userInfo.email,
-                        Bcnt: new_Bcnt,                                //대여횟수 1 증가
+                        Bcnt: userInfo.Bcnt + 1,                                //대여횟수 1 증가
                         Bcurrent: true,                                         //대여상태 변경
                         ExtRent: userInfo.ExtRent,     
                         TTL: (currentTime + (3 * 24 * 60 * 60)).toString()      // 현재 시간 + 3일, 초(sec) 단위
