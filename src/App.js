@@ -84,8 +84,9 @@ function App() {
 
             // 응답이 비어있거나 예상치 못한 형식일 경우를 대비한 예외 처리
             if (!response || typeof response !== 'object') {
-                postinfotempl(0);
-                getinfowtempl();
+                console.log('No user info');
+                await postinfotempl(0);
+                await getinfowtempl();
                 return;
                 //throw new Error('Invalid response format');
             }
