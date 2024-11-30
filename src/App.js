@@ -37,6 +37,7 @@ function App() {
     const [location, setLocation] = useState({ lat: null, lon: null });
     const [error, setError] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState(null);
+    const [postInfoResult, setPostInfoResult] = useState(null);
 
     async function handleLogout() {
         try {
@@ -91,19 +92,27 @@ function App() {
                 //throw new Error('Invalid response format');
             }
 
-            // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
-            const Bcnt = response.Bcnt ?? 0;
-            const Bcurrent = response.Bcurrent ?? true;
-            const TTL = response.TTL ?? '0';
-            const ExtRent = response.ExtRent ?? true;
+            // 각 속성의 타입 검사 및 에러 처리
+            if (typeof response?.Bcnt !== 'number') {
+                throw new Error('Invalid Bcnt type');
+            }
+            if (typeof response?.Bcurrent !== 'boolean') {
+                throw new Error('Invalid Bcurrent type');
+            }
+            if (typeof response?.TTL !== 'string') {
+                throw new Error('Invalid TTL type');
+            }
+            if (typeof response?.ExtRent !== 'boolean') {
+                throw new Error('Invalid ExtRent type');
+            }
 
             setUserInfo(prevUserInfo => ({
                 ...prevUserInfo,
-                Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
-                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : true,
-                TTL: typeof TTL === 'string' ? TTL : 0,
-                isLoaded: true,     //로딩 완료여부 플래그
-                isExtRent: typeof ExtRent === 'boolean' ? ExtRent : true   //기간연장 요청여부 플래그
+                Bcnt: response.Bcnt,
+                Bcurrent: response.Bcurrent,
+                TTL: response.TTL,
+                isLoaded: true,                 //로딩 완료여부 플래그
+                isExtRent:response.ExtRent      //기간연장 요청여부 플래그
             }));
             
             console.log('GET call succeeded');
@@ -124,18 +133,19 @@ function App() {
                         email: userInfo.email,
                         Bcnt: 0,
                         Bcurrent: false,
-                        ExtRent: false,     //기간연장 요청여부 플래그
-                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일, 초(sec) 단위
+                        ExtRent: false,         //기간연장 요청여부 플래그
+                        TTL:  '0'               //TTL 초기화
                     }
                     break;
                 case 1:     //대여요청
+                    new_Bcnt = userInfo.Bcnt + 1
                     bodydata = {
                         userId: userInfo.sub,
                         email: userInfo.email,
-                        Bcnt: userInfo.Bcnt,
-                        Bcurrent: userInfo.Bcurrent,
-                        ExtRent: userInfo.ExtRent,     //기간연장 요청여부 플래그
-                        TTL: userInfo.TTL // TTL
+                        Bcnt: new_Bcnt,                                //대여횟수 1 증가
+                        Bcurrent: true,                                         //대여상태 변경
+                        ExtRent: userInfo.ExtRent,     
+                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString()      // 현재 시간 + 3일, 초(sec) 단위
                     }
                     break;
                 case 2:     //반납요청
@@ -143,9 +153,9 @@ function App() {
                         userId: userInfo.sub,
                         email: userInfo.email,
                         Bcnt: userInfo.Bcnt,
-                        Bcurrent: userInfo.Bcurrent,
-                        ExtRent: userInfo.ExtRent,     //기간연장 요청여부 플래그
-                        TTL: userInfo.TTL // TTL
+                        Bcurrent: false,                //대여상태 변경
+                        ExtRent: false,                 //기간연장 요청여부 플래그 초기화
+                        TTL: '0'                        // TTL 초기화
                     }
                     break;
                 case 3:     //연장요청
@@ -154,8 +164,8 @@ function App() {
                         email: userInfo.email,
                         Bcnt: userInfo.Bcnt,
                         Bcurrent: userInfo.Bcurrent,
-                        ExtRent: userInfo.ExtRent,     //기간연장 요청여부 플래그
-                        TTL: (parseInt(userInfo.TTL) + (24*60*60)).toString() // TTL + 1일, 초(sec) 단위
+                        ExtRent: true,                                              //기간연장 요청여부 플래그
+                        TTL: (parseInt(userInfo.TTL) + (24*60*60)).toString()       // TTL + 1일, 초(sec) 단위
                     }
                     break;
                 default:
@@ -172,21 +182,9 @@ function App() {
             const { body } = await restOperation.response;
             const response = await body.json();
 
-            // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
-            const Bcnt = response.Bcnt ?? 0;
-            const Bcurrent = response.Bcurrent ?? true;
-            const TTL = response.TTL ?? '0';
-            const ExtRent = response.ExtRent ?? true;
-            
-            setUserInfo(prevUserInfo => ({
-                ...prevUserInfo,
-                Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
-                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : true,
-                TTL: typeof TTL === 'string' ? TTL : 0,
-                isLoaded: true,     //로딩 완료여부 플래그
-                isExtRent: typeof ExtRent === 'boolean' ? ExtRent : true    //기간연장 요청여부 플래그
-            }));
-            
+            // 호출 결과를 state에 저장
+            setPostInfoResult({ callnum, response });
+
             console.log('POST call succeeded');
             console.log(response);
         } catch (e) {
@@ -516,17 +514,18 @@ function App() {
     }, [userInfo?.sub, userInfo?.isLoaded]);
 
     useEffect(() => {
-        if(userInfo?.sub && userInfo?.Bcnt != 0) {
+        if(userInfo?.sub && postInfoResult) {
             console.log('Rent Event!')
             getinfowtempl();
             console.log(`현재 useState: ${userInfo}`)
         }
-    }, [userInfo?.Bcurrent || userInfo?.isExtRent])
+    }, [userInfo?.sub, postInfoResult])
 
     console.log('Bcnt debug: ', userInfo?.Bcnt);
     console.log('Bcurrent debug: ', userInfo?.Bcurrent);
     console.log('TTL debug: ', userInfo?.TTL);
     console.log('Flag debug: ', userInfo?.isLoaded);
+    console.log('ExtRent debug: ', userInfo?.isLoaded);
 
     return (
               <div className="App">
