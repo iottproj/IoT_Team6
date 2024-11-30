@@ -21,6 +21,33 @@ const locationIcon = new L.Icon({
   popupAnchor: [0, -40],
 });
 
+const markers = [
+  {
+    id: 1,
+    name: "한국항공대학교",
+    position: [37.6009, 126.8642],
+    umbrellas: 5, // 대여 가능한 우산 개수
+  },
+  {
+    id: 2,
+    name: "광화문",
+    position: [37.5759, 126.9769],
+    umbrellas: 3,
+  },
+  {
+    id: 3,
+    name: "여의도",
+    position: [37.5240, 126.9269],
+    umbrellas: 4,
+  },
+  {
+    id: 4,
+    name: "홍대입구역",
+    position: [37.5561, 126.9236],
+    umbrellas: 2,
+  },
+];
+
 function App() {
     const [currentPage, setCurrentPage] = useState("map");
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
@@ -168,26 +195,6 @@ function App() {
         `);
     };
 
-    /* 현재 위치 가져오기 */
-        useEffect(() => {
-          if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-              (position) => {
-                setLocation({
-                  lat: position.coords.latitude,
-                  lon: position.coords.longitude,
-                });
-              },
-              (error) => {
-                setError("현재 위치를 가져올 수 없습니다.");
-                console.error("Geolocation error:", error);
-              }
-            );
-          } else {
-            setError("Geolocation을 지원하지 않는 브라우저입니다.");
-          }
-     }, []);
-
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         async function handleLogin() {
@@ -263,53 +270,54 @@ function App() {
     };
 
     /* 지도 화면 렌더링 */
-      const renderMapPage = () => (
-        <div>
-          <h1 style={{ color: "#527394", fontSize: "1.8rem", marginBottom: "10px" }}>
-            무인 우산 대여 서비스
-          </h1>
-          <h2 style={{ color: "#6ca7ae", fontSize: "1rem", marginBottom: "10px" }}>
-            우산이 필요하신가요? 편하게 우산을 빌려보세요
-          </h2>
-          <h3 style={{ color: "#6ca7ae", fontSize: "1.2rem", marginBottom: "20px" }}>
-            대여하실 우산함 위치를 클릭해주세요
-          </h3>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {location.lat && location.lon ? (
+        const renderMapPage = () => (
+          <div>
+            <h1 style={{ color: "#527394", fontSize: "1.8rem", marginBottom: "10px" }}>
+              무인 우산 대여 서비스
+            </h1>
+            <h2 style={{ color: "#6ca7ae", fontSize: "1rem", marginBottom: "10px" }}>
+              우산이 필요하신가요? 편하게 우산을 빌려보세요
+            </h2>
+            <h3 style={{ color: "#6ca7ae", fontSize: "1.2rem", marginBottom: "20px" }}>
+              대여하실 우산함 위치를 클릭해주세요
+            </h3>
             <MapContainer
-              center={[location.lat, location.lon]}
-              zoom={15}
+              center={[37.5665, 126.9780]} // 서울 중심 좌표
+              zoom={12}
               style={{ height: "500px", width: "100%" }}
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               />
-              <Marker position={[location.lat, location.lon]} icon={locationIcon}>
-                <Popup>
-                  <p>대여 가능한 위치입니다.</p>
-                  <p>대여 가능 우산 개수 : 3 </p>
-                  <button
-                    onClick={() => setCurrentPage("details")}
-                    style={{
-                      padding: "5px 10px",
-                      backgroundColor: "#6ca7ae",
-                      color: "white",
-                      border: "none",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    대여하기
-                  </button>
-                </Popup>
-              </Marker>
+              {markers.map((marker) => (
+                <Marker
+                  key={marker.id}
+                  position={marker.position}
+                  icon={locationIcon}
+                >
+                  <Popup>
+                    <p>대여 가능한 위치: {marker.name}</p>
+                    <p>대여 가능 우산 개수: {marker.umbrellas}</p>
+                    <button
+                      onClick={() => setCurrentPage("details")}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#6ca7ae",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      대여하기
+                    </button>
+                  </Popup>
+                </Marker>
+              ))}
             </MapContainer>
-          ) : (
-            <p>현재 위치를 불러오는 중입니다...</p>
-          )}
-        </div>
-      );
+          </div>
+        );
 
       const renderDetailsPage = () => (
           <div className="App">
@@ -432,6 +440,4 @@ function App() {
               </div>
           );
         }
-
-
 export default App;
