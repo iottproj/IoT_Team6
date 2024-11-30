@@ -211,12 +211,14 @@ function App() {
             return; // 취소시 창 종료
         }
         // 두 번째 잠금 해제 진행 코드 작성 부분
-        // 최종적으로 대여 완료 메시지 띄우기
-        postinfotempl(1);
-        alert("우산이 3일간 대여되었습니다!");
-        // 초기 상태로 돌아가기
-        setSelectedLocation(null);
-        setCurrentPage("map");
+        else{
+            // 최종적으로 대여 완료 메시지 띄우기
+            postinfotempl(1);
+            alert("우산이 3일간 대여되었습니다!");
+            // 초기 상태로 돌아가기
+            setSelectedLocation(null);
+            setCurrentPage("map");
+        }
     };
 
     /* 반납하기 버튼 클릭시 */
@@ -227,8 +229,10 @@ function App() {
             alert("반납할 우산이 없습니다.");
             return
         }
-        postinfotempl(2);
-        alert("잠금이 해제되었습니다. 우산을 올바른 위치에 반납해주세요.");
+        else{
+            postinfotempl(2);
+            alert("잠금이 해제되었습니다. 우산을 올바른 위치에 반납해주세요.");
+        }
       };
 
     /* 대여 연장하기 버튼 클릭시 */
@@ -239,10 +243,14 @@ function App() {
             alert("대여기간을 연장할 우산이 없습니다.");
             return
         }
-
-        // 대여 기간 연장 코드 작성 부분
-        postinfotempl(3);
-        alert("우산 대여 기간이 1일 연장되었습니다.");
+        else if(userInfo.isExtRent){
+            alert("이미 대여기간을 연장한 상태입니다.")
+        }
+        else{
+            // 대여 기간 연장 코드 작성 부분
+            postinfotempl(3);
+            alert("우산 대여 기간이 1일 연장되었습니다.");
+        }
     };
 
     /* 사용방법 버튼 클릭시 새로운 윈도우 생성 */
