@@ -132,6 +132,12 @@ body, .App {
     font-size: 1.5rem;
     margin-bottom: 20px;
 }
+.profile-slide h2.email {
+    font-size: 1rem;
+    color: rgb(82, 115, 148);
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
 
 .profile-slide button {
     padding: 10px;
