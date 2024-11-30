@@ -120,33 +120,33 @@ function App() {
             switch(callnum) {
                 case 0:     //사용자 최초 이용시
                     bodydata = {
-                        userId: {S: userInfo.sub},
-                        email: {S: userInfo.email},
-                        Bcnt: {N: 0},
-                        Bcurrent: {BOOL: false},
-                        ExtRent: {BOOL: false},     //기간연장 요청여부 플래그
-                        TTL: {S: (currentTime + (3 * 24 * 60 * 60)).toString()} // 현재 시간 + 3일
+                        userId: userInfo.sub,
+                        email: userInfo.email,
+                        Bcnt: 0,
+                        Bcurrent: false,
+                        ExtRent: false,     //기간연장 요청여부 플래그
+                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일
                     }
                     break;
                 case 1:     //대여요청
                     bodydata = {
-                        userId: {S: userInfo.sub},
-                        Bcnt: {N: userInfo.Bcnt + 1},
-                        Bcurrent: {BOOL: true}
+                        userId:  userInfo.sub,
+                        Bcnt: userInfo.Bcnt + 1,
+                        Bcurrent: true
                     }
                     break;
                 case 2:     //반납요청
                     bodydata = {
-                        userId: {S: userInfo.sub},
-                        Bcurrent: {BOOL: false},
-                        ExtRent: {BOOL: false}      //기간연장 요청여부 플래그
+                        userId: userInfo.sub,
+                        Bcurrent: false,
+                        ExtRent: false      //기간연장 요청여부 플래그
                     }
                     break;
                 case 3:     //연장요청
                     bodydata = {
-                        userId: {S: userInfo.sub},
-                        ExtRent: {BOOL: true},
-                        TTL: {S: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString()} // 현재 TTL + 24시간
+                        userId: userInfo.sub,
+                        ExtRent:  true,
+                        TTL: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString() // 현재 TTL + 24시간
                     }
                     break;
                 default:
@@ -510,6 +510,7 @@ function App() {
         if(userInfo?.sub && userInfo?.Bcnt != 0) {
             console.log('Rent Event!')
             getinfowtempl();
+            console.log(`현재 useState: ${userInfo}`)
         }
     }, [userInfo?.Bcurrent || userInfo?.isExtRent])
 
