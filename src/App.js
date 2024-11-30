@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import { fetchAuthSession } from 'aws-amplify/auth';
 import { signInWithRedirect } from 'aws-amplify/auth';
 import { signOut } from 'aws-amplify/auth';
@@ -11,13 +14,22 @@ import awsExports from './aws-exports';
 Amplify.configure(awsExports); // Amplify 초기화
 Amplify.configure(amplifyconfig);
 
+const locationIcon = new L.Icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/854/854878.png", // 위치 아이콘
+  iconSize: [40, 40],
+  iconAnchor: [20, 40],
+  popupAnchor: [0, -40],
+});
+
 function App() {
+    const [currentPage, setCurrentPage] = useState("map");
     const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
     const [userInfo, setUserInfo] = useState(null);
     const [isProfileOpen, setIsProfileOpen] = useState(false)
-     
+    const [location, setLocation] = useState({ lat: null, lon: null });
+    const [error, setError] = useState(null);
 
     async function handleLogout() {
         try {
@@ -87,14 +99,6 @@ function App() {
             console.log('GET call failed: ', e.response ? JSON.parse(e.response.body) : e);
         }
     }
-
-    
-
-    /* 우산 번호 클릭시 */
-    const handleButtonClick = (number) => {
-        setUmbrellaNumber(number);
-    };
-
     /* 대여하기 버튼 클릭시 */
     const handleBorrowClick = () => {
         if (umbrellaNumber) {
@@ -163,6 +167,26 @@ function App() {
             </html>
         `);
     };
+
+    /* 현재 위치 가져오기 */
+        useEffect(() => {
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              (position) => {
+                setLocation({
+                  lat: position.coords.latitude,
+                  lon: position.coords.longitude,
+                });
+              },
+              (error) => {
+                setError("현재 위치를 가져올 수 없습니다.");
+                console.error("Geolocation error:", error);
+              }
+            );
+          } else {
+            setError("Geolocation을 지원하지 않는 브라우저입니다.");
+          }
+     }, []);
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
@@ -237,6 +261,123 @@ function App() {
     const toggleProfile = () => {
             setIsProfileOpen((prevState) => !prevState);
     };
+
+    /* 지도 화면 렌더링 */
+      const renderMapPage = () => (
+        <div>
+          <h1 style={{ color: "#527394", fontSize: "1.8rem", marginBottom: "10px" }}>
+            무인 우산 대여 서비스
+          </h1>
+          <h2 style={{ color: "#6ca7ae", fontSize: "1rem", marginBottom: "10px" }}>
+            우산이 필요하신가요? 편하게 우산을 빌려보세요
+          </h2>
+          <h3 style={{ color: "#6ca7ae", fontSize: "1.2rem", marginBottom: "20px" }}>
+            대여하실 우산함 위치를 클릭해주세요
+          </h3>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          {location.lat && location.lon ? (
+            <MapContainer
+              center={[location.lat, location.lon]}
+              zoom={15}
+              style={{ height: "500px", width: "100%" }}
+            >
+              <TileLayer
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              />
+              <Marker position={[location.lat, location.lon]} icon={locationIcon}>
+                <Popup>
+                  <p>대여 가능한 위치입니다.</p>
+                  <p>대여 가능 우산 개수 : 3 </p>
+                  <button
+                    onClick={() => setCurrentPage("details")}
+                    style={{
+                      padding: "5px 10px",
+                      backgroundColor: "#6ca7ae",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    대여하기
+                  </button>
+                </Popup>
+              </Marker>
+            </MapContainer>
+          ) : (
+            <p>현재 위치를 불러오는 중입니다...</p>
+          )}
+        </div>
+      );
+
+      const renderDetailsPage = () => (
+          <div className="App">
+            {/* 프로필 버튼 */}
+            <button className="profile-button" onClick={toggleProfile}></button>
+
+            <h1 className="title">무인 우산 대여 서비스</h1>
+            <p className="description">우산이 필요하신가요? 편하게 우산을 빌려보세요.</p>
+
+            {/* 실시간 날씨 정보 출력 */}
+            {weather && weather.main && weather.weather && (
+              <div className="weather-info">
+                <h2>위치: {city}</h2>
+                <div className="weather-details">
+                  <p>현재 온도: {weather.main.temp}°C</p>
+                  <p>현재 날씨: {weather.weather[0].description}</p>
+                  <p>습도: {weather.main.humidity}%</p>
+                  <p>압력: {weather.main.pressure} hPa</p>
+                  {weather.rain && weather.rain["1h"] && (
+                    <p>최근 1시간 강수량: {weather.rain["1h"]} mm</p>
+                  )}
+                </div>
+              </div>
+            )}
+            <div className="button-grid">
+              <button onClick={handleBorrowClick}>대여하기</button>
+              <button onClick={handleReturnClick}>반납하기</button>
+              <button onClick={handleOpenInstructions}>사용 방법</button>
+              <button onClick={handleExtendBorrowClick}>대여 연장하기</button>
+            </div>
+            <div className={`profile-slide ${isProfileOpen ? "open" : ""}`}>
+              <h2>프로필 정보</h2>
+              <h2> 이메일 : {userInfo?.email ? userInfo.email : '이메일을 불러오는 중...'}</h2>
+              <p>총 대여 횟수: {userInfo?.Bcnt !== undefined ? `${userInfo.Bcnt}회` : '대여 횟수 불러오는 중...'}</p>
+              <p>남은 대여 기간: 3일</p>
+              <div className="profile-buttons">
+                <button onClick={toggleProfile}>닫기</button>
+                <button onClick={() => {
+                    const confirmLogout = window.confirm("로그아웃 하시겠습니까?");
+                    if (confirmLogout) {
+                      alert("로그아웃 되었습니다!");
+                      handleLogout();
+                    }
+                  }}
+                >
+                  로그아웃
+                </button>
+                <button
+                    onClick={() => {
+                    setCurrentPage("map");
+                    setIsProfileOpen(false); // 프로필 슬라이드 닫기
+                    }}
+                    style={{
+                       marginTop: "10px",
+                       padding: "10px",
+                       backgroundColor: "#527394",
+                       color: "white",
+                       border: "none",
+                       borderRadius: "5px",
+                       cursor: "pointer",
+                     }}
+                    >
+                      다른 우산함 선택
+                 </button>
+              </div>
+            </div>
+          </div>
+            );
     
     useEffect(() => {
         /*
@@ -283,68 +424,14 @@ function App() {
       console.log('Bcurrent debug: ', userInfo?.Bcurrent);
       console.log('TTL debug: ', userInfo?.TTL);
       console.log('Flag debug: ', userInfo?.isLoaded);
+
     return (
-        <div className="App">
-            {/* 프로필 버튼 */}
-            <button className="profile-button" onClick={toggleProfile}></button>
+              <div className="App">
+                {currentPage === "map" && renderMapPage()}
+                {currentPage === "details" && renderDetailsPage()}
+              </div>
+          );
+        }
 
-            <h1 className="title">무인 우산 대여 서비스</h1>
-            <p className="description">우산이 필요하신가요? 편하게 우산을 빌려보세요.</p>
-
-            {/* 실시간 날씨 정보 출력 */}
-            {weather && weather.main && weather.weather && (
-                <div className="weather-info">
-                    <h2>위치: {city}</h2>
-                    <div className="weather-details">
-                        <p>현재 온도: {weather.main.temp}°C</p>
-                        <p>현재 날씨: {weather.weather[0].description}</p>
-                        <p>습도: {weather.main.humidity}%</p>
-                        <p>압력: {weather.main.pressure} hPa</p>
-                        {weather.rain && weather.rain['1h'] && (
-                          <p>최근 1시간 강수량: {weather.rain['1h']} mm</p>
-                        )}
-                    </div>
-                </div>
-            )}
-            {/* 우산 번호 버튼 */}
-            <div className="umbrella-buttons">
-                {Array.from({ length: 20 }, (_, index) => (
-                    <button
-                        key={index + 1}
-                        className={`umbrella-button ${umbrellaNumber === index + 1 ? 'selected' : ''}`}
-                        onClick={() => handleButtonClick(index + 1)}
-                    >
-                        {index + 1}
-                    </button>
-                ))}
-            </div>
-
-            <div className="button-grid">
-                <button onClick={handleBorrowClick}>대여하기</button>
-                <button onClick={handleReturnClick}>반납하기</button>
-                <button onClick={handleOpenInstructions}>사용 방법</button>
-                <button onClick={handleExtendBorrowClick}>대여 연장하기</button>
-            </div>
-            <div className={`profile-slide ${isProfileOpen ? 'open' : ''}`}>
-                <h2>프로필 정보</h2>
-                <h2> 이메일 : {userInfo?.email ? userInfo.email : '이메일을 불러오는 중...'}</h2>
-                <p>총 대여 횟수: {userInfo?.Bcnt !== undefined ? `${userInfo.Bcnt}회` : '대여 횟수 불러오는 중...'}</p>
-                 <div className="profile-buttons">
-                       <button onClick={toggleProfile}>닫기</button>
-                        <button onClick={() => {
-                          const confirmLogout = window.confirm('로그아웃 하시겠습니까?');
-                          if (confirmLogout) {
-                               alert('로그아웃 되었습니다!');
-                               handleLogout();
-                               //toggleProfile(); // 로그아웃 후 슬라이드 닫기
-                          }
-                      }}>
-                           로그아웃
-                     </button>
-                </div>
-            </div>
-        </div>
-    );
-}
 
 export default App;

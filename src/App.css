@@ -6,14 +6,12 @@ body, .App {
   background-color: rgb(234, 238, 236);
   text-align: center;
 }
-
 /* 타이틀 */
 .title {
   font-size: 1.5rem;
   color: rgb(82, 115, 148);
   margin: 10px 0;
 }
-
 /* 설명 텍스트 */
 .description {
   font-size: 0.9rem;
@@ -26,8 +24,6 @@ body, .App {
   color: rgb(108, 167, 174);
   margin-bottom: 15px;
 }
-
-
 /* 날씨 정보 */
 .weather-info h2 {
   font-size: 1rem;
@@ -44,36 +40,6 @@ body, .App {
   font-size: 0.9rem;
   line-height: 1.4;
 }
-
-/* 우산 번호 버튼 */
-.umbrella-buttons {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
-  margin: 20px 0;
-  padding: 10px;
-  background-color: rgb(234, 238, 236);
-  border: 2px solid rgb(82, 115, 148);
-  border-radius: 15px;
-}
-.umbrella-button {
-  width: 50px;
-  height: 50px;
-  font-size: 0.8rem;
-  border: 2px solid rgb(108, 167, 174);
-  border-radius: 50%;
-  background-color: transparent;
-  cursor: pointer;
-}
-.umbrella-button.selected {
-  border-color: red;
-  color: red;
-}
-.umbrella-button:hover {
-  border-color: red;
-  color: red;
-}
-
 /* 프로필 버튼 */
 .profile-button {
   position: absolute;
@@ -105,14 +71,17 @@ body, .App {
 
 /* 각 버튼의 공통 스타일 */
 .button-grid button {
-  padding: 10px 20px;
-  font-size: 1rem;
+  padding: 40px 80px;
+  font-size: 2rem;
   background-color: rgb(108, 167, 174);
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
+  white-space: nowrap;
+
+  text-overflow: ellipsis;
   transition: transform 0.2s, box-shadow 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -130,6 +99,13 @@ body, .App {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
+  .button-grid button {
+      padding: 20px 40px; /* 버튼 내부 여백 조정 */
+      font-size: 1.2rem; /* 텍스트 크기 감소 */
+      white-space: nowrap; /* 텍스트 한 줄로 유지 */
+      overflow: hidden; /* 넘치는 텍스트 숨김 */
+      text-overflow: ellipsis; /* 넘치는 텍스트에 "..." 추가 */
+    }
 }
 
 .profile-slide {
