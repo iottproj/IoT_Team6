@@ -118,7 +118,7 @@ function App() {
             switch(callnum) {
                 case 0:     //사용자 최초 이용시
                     bodydata = {
-                        sub: userInfo.sub,
+                        userId: userInfo.sub,
                         email: userInfo.email,
                         Bcnt: 0,
                         Bcurrent: false,
