@@ -22,30 +22,10 @@ const locationIcon = new L.Icon({
 });
 
 const markers = [
-  {
-    id: 1,
-    name: "한국항공대학교",
-    position: [37.6009, 126.8642],
-    umbrellas: 5, // 대여 가능한 우산 개수
-  },
-  {
-    id: 2,
-    name: "광화문",
-    position: [37.5759, 126.9769],
-    umbrellas: 3,
-  },
-  {
-    id: 3,
-    name: "여의도",
-    position: [37.5240, 126.9269],
-    umbrellas: 4,
-  },
-  {
-    id: 4,
-    name: "홍대입구역",
-    position: [37.5561, 126.9236],
-    umbrellas: 2,
-  },
+  { id: 1, name: "한국항공대학교", position: [37.6009, 126.8642], umbrellas: 5, }, // umbrellas - 대여 가능 우산 개수
+  { id: 2, name: "광화문", position: [37.5759, 126.9769], umbrellas: 3, },
+  { id: 3, name: "여의도", position: [37.5240, 126.9269], umbrellas: 4, },
+  { id: 4, name: "홍대입구역", position: [37.5561, 126.9236], umbrellas: 2, },
 ];
 
 function App() {
@@ -57,6 +37,7 @@ function App() {
     const [isProfileOpen, setIsProfileOpen] = useState(false)
     const [location, setLocation] = useState({ lat: null, lon: null });
     const [error, setError] = useState(null);
+    const [selectedLocation, setSelectedLocation] = useState(null);
 
     async function handleLogout() {
         try {
@@ -195,6 +176,12 @@ function App() {
         `);
     };
 
+    /* 선택된 위치 저장 후 상세 페이지 이동 */
+    const handleLocationSelect = (marker) => {
+      setSelectedLocation(marker);
+      setCurrentPage("details");
+    };
+
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         async function handleLogin() {
@@ -230,7 +217,7 @@ function App() {
         
         const fetchWeather = async () => {
             const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
-            const city = 'Gyeonggi-do';
+            const city = 'Seoul';
             const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=kr`;
 
             try {
@@ -240,7 +227,6 @@ function App() {
 
                 if (data.main && data.weather) {
                     setWeather(data);
-                    handleCityName(data.name);
                 } else {
                     console.error("날씨 데이터를 찾을 수 없습니다:", data);
                 }
@@ -253,17 +239,6 @@ function App() {
         fetchUser();
         fetchWeather();
     }, []);
-
-    /* 도시 이름 한글 출력 */
-    const handleCityName = (cityName) => {
-        if (cityName === 'Gyeonggi-do') {
-            setCity('경기도');
-        } else if (cityName === 'Seoul') {
-            setCity('서울');
-        } else {
-            setCity(cityName);
-        }
-    };
 
     const toggleProfile = () => {
             setIsProfileOpen((prevState) => !prevState);
@@ -330,7 +305,9 @@ function App() {
             {/* 실시간 날씨 정보 출력 */}
             {weather && weather.main && weather.weather && (
               <div className="weather-info">
-                <h2>위치: {city}</h2>
+                <h2>{selectedLocation
+                          ? `선택된 위치: ${selectedLocation.name}`
+                          : "위치를 선택하세요."}</h2>
                 <div className="weather-details">
                   <p>현재 온도: {weather.main.temp}°C</p>
                   <p>현재 날씨: {weather.weather[0].description}</p>
