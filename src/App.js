@@ -75,37 +75,93 @@ function App() {
     */
     async function getinfowtempl() {
         try {
-          const restOperation = get({
-            apiName: 'UserInfoAPI',
-            path: `/userinfo/object/${userInfo.sub}`,
-        });
-        const { body } = await restOperation.response;
-        const response = await body.json();
+            const restOperation = get({
+                apiName: 'UserInfoAPI',
+                path: `/userinfo/object/${userInfo.sub}`,
+            });
+            const { body } = await restOperation.response;
+            const response = await body.json();
 
-        // 응답이 비어있거나 예상치 못한 형식일 경우를 대비한 예외 처리
-        if (!response || typeof response !== 'object') {
-            throw new Error('Invalid response format');
-        }
+            // 응답이 비어있거나 예상치 못한 형식일 경우를 대비한 예외 처리
+            if (!response || typeof response !== 'object') {
+                throw new Error('Invalid response format');
+            }
 
-        // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
-        const Bcnt = response.Bcnt ?? 0;
-        const Bcurrent = response.Bcurrent ?? false;
-        const TTL = response.TTL ?? 0;
-        
-        setUserInfo(prevUserInfo => ({
-            ...prevUserInfo,
-            Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
-            Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
-            TTL: typeof TTL === 'number' ? TTL : 0,
-            isLoaded: true  //로딩 완료여부 플래그
-        }));
-        
-        console.log('GET call succeeded');
-        console.log(response);
+            // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
+            const Bcnt = response.Bcnt ?? 0;
+            const Bcurrent = response.Bcurrent ?? false;
+            const TTL = response.TTL ?? '0';
+            
+            setUserInfo(prevUserInfo => ({
+                ...prevUserInfo,
+                Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
+                Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
+                TTL: typeof TTL === 'number' ? TTL : 0,
+                isLoaded: true  //로딩 완료여부 플래그
+            }));
+            
+            console.log('GET call succeeded');
+            console.log(response);
         } catch (e) {
             console.log('GET call failed: ', e.response ? JSON.parse(e.response.body) : e);
         }
     }
+
+    async function postinfotempl(callnum) {
+        try {
+            let bodydata;
+            const currentTime = Math.floor(Date.now() / 1000);
+            switch(callnum) {
+                case 0:     //사용자 최초 이용시
+                    bodydata = {
+                        sub: userInfo.sub,
+                        email: userInfo.email,
+                        Bcnt: 0,
+                        Bcurrent: false,
+                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일
+                    }
+                case 1:     //대여요청
+                    bodydata = {
+                        Bcnt: userInfo.Bcnt + 1,
+                        Bcurrent: true
+                    }
+                case 2:     //반납요청
+                    bodydata = {
+                        Bcurrent: false
+                    }
+                case 3:     //연장요청
+                    bodydata = {
+                        TTL: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString() // 현재 TTL + 24시간
+                    }
+            }
+            const restOperation = post({
+                apiName: 'UserInfoAPI',
+                path: '/userinfo',
+                options: {
+                body: bodydata
+                }
+            });
+
+            const { body } = await restOperation.response;
+            const response = await body.json();
+            setUserInfo(prevUserInfo => {
+                const userInfoData = response["UserInfo"];
+                return {
+                    ...prevUserInfo,
+                    Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
+                    Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
+                    userId: userInfoData.userId ? userInfoData.userId.S : '',
+                    TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
+                };
+            });
+            
+            console.log('POST call succeeded');
+            console.log(response);
+        } catch (e) {
+            console.log('POST call failed: ', e.response ? JSON.parse(e.response.body) : e);
+        }
+    }
+
     /* 대여하기 버튼 클릭시 */
     const handleBorrowClick = () => {
           // 1차적으로 대여 확인 창 띄우기
