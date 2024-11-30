@@ -280,6 +280,7 @@ function App() {
 
     /* 선택된 위치 저장 후 상세 페이지 이동 */
     const handleLocationSelect = (marker) => {
+        getinfowtempl();
         setSelectedLocation(marker);
         setCurrentPage("details");
     };
@@ -503,7 +504,7 @@ function App() {
             getinfowtempl();
         }
     }, [userInfo?.sub, userInfo?.isLoaded]);
-    
+
     console.log('Bcnt debug: ', userInfo?.Bcnt);
     console.log('Bcurrent debug: ', userInfo?.Bcurrent);
     console.log('TTL debug: ', userInfo?.TTL);
