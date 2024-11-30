@@ -227,7 +227,7 @@ function App() {
             alert("반납할 우산이 없습니다.");
             return
         }
-        postinfotempl(1);
+        postinfotempl(2);
         alert("잠금이 해제되었습니다. 우산을 올바른 위치에 반납해주세요.");
       };
 
@@ -236,11 +236,12 @@ function App() {
         const isClicked = window.confirm(`대여기간을 연장하시겠습니까?`);
         if (!isClicked) return;
         if(userInfo.Bcnt == 0 || userInfo.Bcurrent == false) {
-            alert("대여 기간을 연장할 우산이 없습니다.");
+            alert("대여기간을 연장할 우산이 없습니다.");
             return
         }
 
         // 대여 기간 연장 코드 작성 부분
+        postinfotempl(3);
         alert("우산 대여 기간이 1일 연장되었습니다.");
     };
 
