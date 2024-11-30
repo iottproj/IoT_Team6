@@ -112,7 +112,7 @@ function App() {
                 Bcurrent: response.Bcurrent,
                 TTL: response.TTL,
                 isLoaded: true,                 //로딩 완료여부 플래그
-                isExtRent:response.ExtRent      //기간연장 요청여부 플래그
+                isExtRent: response.ExtRent     //기간연장 요청여부 플래그
             }));
             
             console.log('GET call succeeded');
@@ -143,7 +143,7 @@ function App() {
                         email: userInfo.email,
                         Bcnt: userInfo.Bcnt + 1,                                //대여횟수 1 증가
                         Bcurrent: true,                                         //대여상태 변경
-                        ExtRent: userInfo.ExtRent,     
+                        ExtRent: userInfo.isExtRent,     
                         TTL: (currentTime + (3 * 24 * 60 * 60)).toString()      // 현재 시간 + 3일, 초(sec) 단위
                     }
                     break;
@@ -524,7 +524,7 @@ function App() {
     console.log('Bcurrent debug: ', userInfo?.Bcurrent);
     console.log('TTL debug: ', userInfo?.TTL);
     console.log('Flag debug: ', userInfo?.isLoaded);
-    console.log('ExtRent debug: ', userInfo?.isLoaded);
+    console.log('ExtRent debug: ', userInfo?.isExtRent);
 
     return (
               <div className="App">
