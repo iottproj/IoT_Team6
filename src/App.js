@@ -84,7 +84,10 @@ function App() {
 
             // 응답이 비어있거나 예상치 못한 형식일 경우를 대비한 예외 처리
             if (!response || typeof response !== 'object') {
-                throw new Error('Invalid response format');
+                postinfotempl(0);
+                getinfowtempl();
+                return;
+                //throw new Error('Invalid response format');
             }
 
             // 기본값을 설정하여 속성이 없는 경우에도 안전하게 처리
@@ -120,19 +123,25 @@ function App() {
                         Bcurrent: false,
                         TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일
                     }
+                    break;
                 case 1:     //대여요청
                     bodydata = {
                         Bcnt: userInfo.Bcnt + 1,
                         Bcurrent: true
                     }
+                    break;
                 case 2:     //반납요청
                     bodydata = {
                         Bcurrent: false
                     }
+                    break;
                 case 3:     //연장요청
                     bodydata = {
                         TTL: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString() // 현재 TTL + 24시간
                     }
+                    break;
+                default:
+                    throw new Error('Invalid callnum');
             }
             const restOperation = post({
                 apiName: 'UserInfoAPI',
@@ -267,15 +276,13 @@ function App() {
                        email,
                        sub
                     });
-                    /*console.log('origin_sub:', sub);
-                    console.log('origin_email:', email);
-                    console.log('sub:', userInfo.sub);
-                    console.log('email:', userInfo.email);*/
                 }
               //console.log('access_token:', accessToken)
               //console.log('id_token:', idToken)
+              fetchWeather();
             } catch (err) {
               console.log('Error fetching user:', err);
+              handleLogin();
             }
         }
         
@@ -298,10 +305,7 @@ function App() {
                 console.error('날씨 정보를 불러오는 중 오류가 발생했습니다:', error);
             }
         };
-        
-        handleLogin();
         fetchUser();
-        fetchWeather();
     }, []);
 
     const toggleProfile = () => {
