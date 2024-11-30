@@ -101,7 +101,8 @@ function App() {
                 Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
                 Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
                 TTL: typeof TTL === 'number' ? TTL : 0,
-                isLoaded: true  //로딩 완료여부 플래그
+                isLoaded: true,     //로딩 완료여부 플래그
+                isExtRent: false    //기간연장 요청여부 플래그
             }));
             
             console.log('GET call succeeded');
@@ -122,22 +123,28 @@ function App() {
                         email: userInfo.email,
                         Bcnt: 0,
                         Bcurrent: false,
+                        ExtRent: false,     //기간연장 요청여부 플래그
                         TTL: (currentTime + (3 * 24 * 60 * 60)).toString() // 현재 시간 + 3일
                     }
                     break;
                 case 1:     //대여요청
                     bodydata = {
+                        userId: userInfo.sub,
                         Bcnt: userInfo.Bcnt + 1,
                         Bcurrent: true
                     }
                     break;
                 case 2:     //반납요청
                     bodydata = {
-                        Bcurrent: false
+                        userId: userInfo.sub,
+                        Bcurrent: false,
+                        ExtRent: false      //기간연장 요청여부 플래그
                     }
                     break;
                 case 3:     //연장요청
                     bodydata = {
+                        userId: userInfo.sub,
+                        ExtRent: true,
                         TTL: (parseInt(userInfo.TTL) + 24 * 60 * 60).toString() // 현재 TTL + 24시간
                     }
                     break;
@@ -165,7 +172,8 @@ function App() {
                 Bcnt: typeof Bcnt === 'number' ? Bcnt : 0,
                 Bcurrent: typeof Bcurrent === 'boolean' ? Bcurrent : false,
                 TTL: typeof TTL === 'number' ? TTL : 0,
-                isLoaded: true  //로딩 완료여부 플래그
+                isLoaded: true,     //로딩 완료여부 플래그
+                isExtRent: false    //기간연장 요청여부 플래그
             }));
             
             console.log('POST call succeeded');
@@ -177,39 +185,56 @@ function App() {
 
     /* 대여하기 버튼 클릭시 */
     const handleBorrowClick = () => {
-          // 1차적으로 대여 확인 창 띄우기
-          const isConfirmed = window.confirm(`${selectedLocation.name} 위치에서 우산을 대여하시겠습니까?`);
-          if (!isConfirmed) {
-              return; // 취소시 창 종료
-          }
-          // 첫 번째 잠금 해제 진행 코드 작성 부분
-          // 2차적으로 결제 요청 창 띄우기
-          const isPaymentConfirmed = window.confirm("결제를 진행해주세요!");
-          if (!isPaymentConfirmed) {
-              return; // 취소시 창 종료
-          }
-          // 두 번째 잠금 해제 진행 코드 작성 부분
-          // 최종적으로 대여 완료 메시지 띄우기
-          alert("우산이 3일간 대여되었습니다!");
-          // 초기 상태로 돌아가기
-          setSelectedLocation(null);
-          setCurrentPage("map");
-      };
+        //현재 우산 대여 여부확인, 이미 대여중이면 진행 불가
+        if(userInfo.Bcurrent == true) {
+            alert("우산 대여중! 한 번에 한 개의 우산만 대여할 수 있습니다.");
+            return;
+        }
+
+        // 1차적으로 대여 확인 창 띄우기
+        const isConfirmed = window.confirm(`${selectedLocation.name} 위치에서 우산을 대여하시겠습니까?`);
+        if (!isConfirmed) {
+            return; // 취소시 창 종료
+        }
+        // 첫 번째 잠금 해제 진행 코드 작성 부분
+        // 2차적으로 결제 요청 창 띄우기
+        const isPaymentConfirmed = window.confirm("결제를 진행해주세요!");
+        if (!isPaymentConfirmed) {
+            return; // 취소시 창 종료
+        }
+        // 두 번째 잠금 해제 진행 코드 작성 부분
+        // 최종적으로 대여 완료 메시지 띄우기
+        postinfotempl(1);
+        alert("우산이 3일간 대여되었습니다!");
+        // 초기 상태로 돌아가기
+        setSelectedLocation(null);
+        setCurrentPage("map");
+    };
 
     /* 반납하기 버튼 클릭시 */
-      const handleReturnClick = () => {
+    const handleReturnClick = () => {
         const isClickedReturn = window.confirm(`${selectedLocation.name} 위치에서 우산을 반납하시겠습니까?`);
         if(!isClickedReturn) return
+        if(userInfo.Bcnt == 0 || userInfo.Bcurrent == false) {
+            alert("반납할 우산이 없습니다.");
+            return
+        }
+        postinfotempl(1);
         alert("잠금이 해제되었습니다. 우산을 올바른 위치에 반납해주세요.");
       };
 
     /* 대여 연장하기 버튼 클릭시 */
-      const handleExtendBorrowClick = () => {
-         const isClicked = window.confirm(`대여기간을 연장하시겠습니까?`);
-               if (!isClicked) return;
-         // 대여 기간 연장 코드 작성 부분
-         alert("우산 대여 기간이 1일 연장되었습니다.");
-      };
+    const handleExtendBorrowClick = () => {
+        const isClicked = window.confirm(`대여기간을 연장하시겠습니까?`);
+        if (!isClicked) return;
+        if(userInfo.Bcnt == 0 || userInfo.Bcurrent == false) {
+            alert("대여 기간을 연장할 우산이 없습니다.");
+            return
+        }
+
+        // 대여 기간 연장 코드 작성 부분
+        alert("우산 대여 기간이 1일 연장되었습니다.");
+    };
 
     /* 사용방법 버튼 클릭시 새로운 윈도우 생성 */
     const handleOpenInstructions = () => {
@@ -255,24 +280,24 @@ function App() {
 
     /* 선택된 위치 저장 후 상세 페이지 이동 */
     const handleLocationSelect = (marker) => {
-      setSelectedLocation(marker);
-      setCurrentPage("details");
+        setSelectedLocation(marker);
+        setCurrentPage("details");
     };
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
         async function handleLogin() {
             try {
-              await signInWithRedirect(); // Hosted UI로 리디렉션
+                await signInWithRedirect(); // Hosted UI로 리디렉션
             } catch (error) {
-              console.error('Error during login:', error);
+                console.error('Error during login:', error);
             }
         }
 
         const fetchUser = async () => {
             try {
-              const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
-              if (idToken) {
+                const {accessToken, idToken} = (await fetchAuthSession()).tokens ?? {};
+                if (idToken) {
                    const email = idToken?.payload?.email.toString(); // 이메일 추출
                    const sub = idToken?.payload?.sub.toString();
                    //console.log('sub :', sub);
@@ -282,12 +307,12 @@ function App() {
                        sub
                     });
                 }
-              //console.log('access_token:', accessToken)
-              //console.log('id_token:', idToken)
-              fetchWeather();
+                //console.log('access_token:', accessToken)
+                //console.log('id_token:', idToken)
+                fetchWeather();
             } catch (err) {
-              console.log('Error fetching user:', err);
-              handleLogin();
+                console.log('Error fetching user:', err);
+                handleLogin();
             }
         }
         
@@ -477,11 +502,12 @@ function App() {
             console.log('email:', userInfo.email);
             getinfowtempl();
         }
-      }, [userInfo?.sub, userInfo?.isLoaded]);
-      console.log('Bcnt debug: ', userInfo?.Bcnt);
-      console.log('Bcurrent debug: ', userInfo?.Bcurrent);
-      console.log('TTL debug: ', userInfo?.TTL);
-      console.log('Flag debug: ', userInfo?.isLoaded);
+    }, [userInfo?.sub, userInfo?.isLoaded]);
+    
+    console.log('Bcnt debug: ', userInfo?.Bcnt);
+    console.log('Bcurrent debug: ', userInfo?.Bcurrent);
+    console.log('TTL debug: ', userInfo?.TTL);
+    console.log('Flag debug: ', userInfo?.isLoaded);
 
     return (
               <div className="App">
