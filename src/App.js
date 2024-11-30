@@ -30,7 +30,6 @@ const markers = [
 
 function App() {
     const [currentPage, setCurrentPage] = useState("map");
-    const [umbrellaNumber, setUmbrellaNumber] = useState(null);
     const [weather, setWeather] = useState(null);
     const [city, setCity] = useState('');
     const [userInfo, setUserInfo] = useState(null);
@@ -109,30 +108,39 @@ function App() {
     }
     /* 대여하기 버튼 클릭시 */
     const handleBorrowClick = () => {
-        if (umbrellaNumber) {
-            alert(`${umbrellaNumber}번 우산 대여 성공!`);
-        } else {
-            alert('우산 번호를 선택해주세요.');
-        }
-    };
+          // 1차적으로 대여 확인 창 띄우기
+          const isConfirmed = window.confirm(`${selectedLocation.name} 위치에서 우산을 대여하시겠습니까?`);
+          if (!isConfirmed) {
+              return; // 취소시 창 종료
+          }
+          // 첫 번째 잠금 해제 진행 코드 작성 부분
+          // 2차적으로 결제 요청 창 띄우기
+          const isPaymentConfirmed = window.confirm("결제를 진행해주세요!");
+          if (!isPaymentConfirmed) {
+              return; // 취소시 창 종료
+          }
+          // 두 번째 잠금 해제 진행 코드 작성 부분
+          // 최종적으로 대여 완료 메시지 띄우기
+          alert("우산이 3일간 대여되었습니다!");
+          // 초기 상태로 돌아가기
+          setSelectedLocation(null);
+          setCurrentPage("map");
+      };
 
     /* 반납하기 버튼 클릭시 */
-    const handleReturnClick = () => {
-        if (umbrellaNumber) {
-            alert(`${umbrellaNumber}번 우산 반납 성공!`);
-        } else {
-            alert('우산 번호를 선택해주세요.');
-        }
-    };
+      const handleReturnClick = () => {
+        const isClickedReturn = window.confirm(`${selectedLocation.name} 위치에서 우산을 반납하시겠습니까?`);
+        if(!isClickedReturn) return
+        alert("잠금이 해제되었습니다. 우산을 올바른 위치에 반납해주세요.");
+      };
 
     /* 대여 연장하기 버튼 클릭시 */
-    const handleExtendBorrowClick = () => {
-        if (umbrellaNumber) {
-            alert(`${umbrellaNumber}번 우산 대여가 1일 연장되었습니다.`);
-        } else {
-            alert('우산 번호를 선택해주세요.');
-        }
-    };
+      const handleExtendBorrowClick = () => {
+         const isClicked = window.confirm(`대여기간을 연장하시겠습니까?`);
+               if (!isClicked) return;
+         // 대여 기간 연장 코드 작성 부분
+         alert("우산 대여 기간이 1일 연장되었습니다.");
+      };
 
     /* 사용방법 버튼 클릭시 새로운 윈도우 생성 */
     const handleOpenInstructions = () => {
@@ -275,14 +283,14 @@ function App() {
                     <p>대여 가능한 위치: {marker.name}</p>
                     <p>대여 가능 우산 개수: {marker.umbrellas}</p>
                     <button
-                      onClick={() => setCurrentPage("details")}
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "#6ca7ae",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "5px",
-                        cursor: "pointer",
+                       onClick={() => handleLocationSelect(marker)} // 선택된 위치 저장
+                       style={{
+                       padding: "5px 10px",
+                       backgroundColor: "#6ca7ae",
+                       color: "white",
+                       border: "none",
+                       borderRadius: "5px",
+                       cursor: "pointer",
                       }}
                     >
                       대여하기
