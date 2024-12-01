@@ -73,21 +73,36 @@ function App() {
             if (typeof response?.Bcurrent !== 'boolean') {
                 throw new Error('Invalid Bcurrent type');
             }
-            if (typeof response?.TTL !== 'number') {
-                throw new Error('Invalid TTL type');
-            }
+
             if (typeof response?.ExtRent !== 'boolean') {
                 throw new Error('Invalid ExtRent type');
             }
 
-            setUserInfo(prevUserInfo => ({
-                ...prevUserInfo,
-                Bcnt: response.Bcnt,
-                Bcurrent: response.Bcurrent,
-                TTL: response.TTL,
-                isLoaded: true,                 //로딩 완료여부 플래그
-                isExtRent: response.ExtRent     //기간연장 요청여부 플래그
-            }));
+            if(response?.TTL){
+                if (typeof response?.TTL !== 'number') {
+                    throw new Error('Invalid TTL type');
+                }
+                else {
+                    setUserInfo(prevUserInfo => ({
+                        ...prevUserInfo,
+                        Bcnt: response.Bcnt,
+                        Bcurrent: response.Bcurrent,
+                        TTL: response.TTL,
+                        isLoaded: true,                 //로딩 완료여부 플래그
+                        isExtRent: response.ExtRent     //기간연장 요청여부 플래그
+                    }));
+                }
+            }
+            else {
+                setUserInfo(prevUserInfo => ({
+                    ...prevUserInfo,
+                    Bcnt: response.Bcnt,
+                    Bcurrent: response.Bcurrent,
+                    TTL: null,
+                    isLoaded: true,                 //로딩 완료여부 플래그
+                    isExtRent: response.ExtRent     //기간연장 요청여부 플래그
+                }));
+            }
             
             console.log('GET call succeeded');
             console.log(response);
