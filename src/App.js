@@ -108,7 +108,7 @@ function App() {
                         Bcnt: 0,
                         Bcurrent: false,
                         ExtRent: false,         //기간연장 요청여부 플래그
-                        TTL:  0                 //TTL 초기화
+                        //TTL:  0                 //TTL 초기화
                     }
                     break;
                 case 1:     //대여요청
@@ -128,7 +128,7 @@ function App() {
                         Bcnt: userInfo.Bcnt,
                         Bcurrent: false,                //대여상태 변경
                         ExtRent: false,                 //기간연장 요청여부 플래그 초기화
-                        TTL: 0                        // TTL 초기화
+                        //TTL: 0                        // TTL 초기화
                     }
                     break;
                 case 3:     //연장요청
