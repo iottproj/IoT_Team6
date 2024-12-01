@@ -47,33 +47,7 @@ function App() {
             console.error('Error during logout:', error);
         }
     }
-    /*
-    async function getinfo() {
-        try {
-          const restOperation = get({
-            apiName: 'UserInfoAPI',
-            path: '/getuserinfo',
-        });
-        const { body } = await restOperation.response;
-        const response = await body.json();
-        setUserInfo(prevUserInfo => {
-            const userInfoData = response["UserInfo"];
-            return {
-                ...prevUserInfo,
-                Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
-                Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
-                userId: userInfoData.userId ? userInfoData.userId.S : '',
-                TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
-            };
-        });
-
-        console.log('GET call succeeded');
-        console.log(response);
-        } catch (e) {
-            console.log('GET call failed: ', e.response ? e.response.body : e);
-        }
-    }
-    */
+    
     async function getinfowtempl() {
         try {
             const restOperation = get({
@@ -99,7 +73,7 @@ function App() {
             if (typeof response?.Bcurrent !== 'boolean') {
                 throw new Error('Invalid Bcurrent type');
             }
-            if (typeof response?.TTL !== 'string') {
+            if (typeof response?.TTL !== 'number') {
                 throw new Error('Invalid TTL type');
             }
             if (typeof response?.ExtRent !== 'boolean') {
@@ -134,7 +108,7 @@ function App() {
                         Bcnt: 0,
                         Bcurrent: false,
                         ExtRent: false,         //기간연장 요청여부 플래그
-                        TTL:  '0'               //TTL 초기화
+                        TTL:  0                 //TTL 초기화
                     }
                     break;
                 case 1:     //대여요청
@@ -144,7 +118,7 @@ function App() {
                         Bcnt: userInfo.Bcnt + 1,                                //대여횟수 1 증가
                         Bcurrent: true,                                         //대여상태 변경
                         ExtRent: userInfo.isExtRent,     
-                        TTL: (currentTime + (3 * 24 * 60 * 60)).toString()      // 현재 시간 + 3일, 초(sec) 단위
+                        TTL: (currentTime + (3 * 24 * 60 * 60))                 // 현재 시간 + 3일, 초(sec) 단위
                     }
                     break;
                 case 2:     //반납요청
@@ -154,7 +128,7 @@ function App() {
                         Bcnt: userInfo.Bcnt,
                         Bcurrent: false,                //대여상태 변경
                         ExtRent: false,                 //기간연장 요청여부 플래그 초기화
-                        TTL: '0'                        // TTL 초기화
+                        TTL: 0                        // TTL 초기화
                     }
                     break;
                 case 3:     //연장요청
@@ -164,7 +138,7 @@ function App() {
                         Bcnt: userInfo.Bcnt,
                         Bcurrent: userInfo.Bcurrent,
                         ExtRent: true,                                              //기간연장 요청여부 플래그
-                        TTL: (parseInt(userInfo.TTL) + (24*60*60)).toString()       // TTL + 1일, 초(sec) 단위
+                        TTL: ((userInfo.TTL) + (24*60*60))                  // TTL + 1일, 초(sec) 단위
                     }
                     break;
                 default:
@@ -480,43 +454,10 @@ function App() {
             );
     
     useEffect(() => {
-        /*
-        async function postinfo() {
-            try {
-              const restOperation = post({
-                apiName: 'UserInfoAPI',
-                path: '/getuserinfo',
-                options: {
-                  body: {
-                    sub: userInfo.sub,
-                    email: userInfo.email
-                  }
-                }
-            });
-    
-            const { body } = await restOperation.response;
-            const response = await body.json();
-            setUserInfo(prevUserInfo => {
-                const userInfoData = response["UserInfo"];
-                return {
-                    ...prevUserInfo,
-                    Bcnt: userInfoData.Bcnt ? parseInt(userInfoData.Bcnt.N) : 0,
-                    Bcurrent: userInfoData.Bcurrent ? userInfoData.Bcurrent.BOOL : false,
-                    userId: userInfoData.userId ? userInfoData.userId.S : '',
-                    TTL: userInfoData.TTL ? parseInt(userInfoData.TTL.S) : 0
-                };
-            });
-            
-            console.log('POST call succeeded');
-            console.log(response);
-            } catch (e) {
-                console.log('POST call failed: ', e.response ? e.response.body : e);
-            }
-        }*/
 
         if (userInfo?.sub && !userInfo?.isLoaded) {
-            console.log('sub:', userInfo.sub);
-            console.log('email:', userInfo.email);
+            //console.log('sub:', userInfo.sub);
+            //console.log('email:', userInfo.email);
             getinfowtempl();
         }
     }, [userInfo?.sub, userInfo?.isLoaded]);
@@ -529,11 +470,11 @@ function App() {
         }
     }, [userInfo?.sub, postInfoResult])
 
-    console.log('Bcnt debug: ', userInfo?.Bcnt);
-    console.log('Bcurrent debug: ', userInfo?.Bcurrent);
-    console.log('TTL debug: ', userInfo?.TTL);
-    console.log('Flag debug: ', userInfo?.isLoaded);
-    console.log('ExtRent debug: ', userInfo?.isExtRent);
+    //console.log('Bcnt debug: ', userInfo?.Bcnt);
+    //console.log('Bcurrent debug: ', userInfo?.Bcurrent);
+    //console.log('TTL debug: ', userInfo?.TTL);
+    //console.log('Flag debug: ', userInfo?.isLoaded);
+    //console.log('ExtRent debug: ', userInfo?.isExtRent);
 
     return (
               <div className="App">

@@ -31,10 +31,6 @@
           "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
           "s3Key": "amplify-builds/iotteam6gen13cd5f954CustomMessage-79797243755045376e46-build.zip"
         },
-        "UserInfoCRUDPY": {
-          "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
-          "s3Key": "amplify-builds/UserInfoCRUDPY-7235735a724e314a6676-build.zip"
-        },
         "UmbTransaction": {
           "deploymentBucketName": "amplify-iotteam6gen1-dev-28e48-deployment",
           "s3Key": "amplify-builds/UmbTransaction-36646a32685547633157-build.zip"
@@ -45,7 +41,8 @@
         }
       },
       "storage": {
-        "UserInfoDB": {}
+        "UserInfoDB": {},
+        "ExpiredUserInfoDB": {}
       },
       "api": {
         "UserInfoAPI": {}

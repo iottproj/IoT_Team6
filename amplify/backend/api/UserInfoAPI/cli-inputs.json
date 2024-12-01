@@ -1,13 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/getuserinfo": {
-      "name": "/getuserinfo",
-      "lambdaFunction": "UserInfoCRUDPY",
-      "permissions": {
-        "setting": "open"
-      }
-    },
     "/transaction": {
       "name": "/transaction",
       "lambdaFunction": "UmbTransaction",

@@ -42,13 +42,6 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
-    "UserInfoCRUDPY": {
-      "Arn": "string",
-      "LambdaExecutionRole": "string",
-      "LambdaExecutionRoleArn": "string",
-      "Name": "string",
-      "Region": "string"
-    },
     "iotteam6gen13cd5f954CustomMessage": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -58,6 +51,14 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "storage": {
+    "ExpiredUserInfoDB": {
+      "Arn": "string",
+      "Name": "string",
+      "PartitionKeyName": "string",
+      "PartitionKeyType": "string",
+      "Region": "string",
+      "StreamArn": "string"
+    },
     "UserInfoDB": {
       "Arn": "string",
       "Name": "string",

@@ -1,0 +1,10 @@
+{
+  "resourceName": "ExpiredUserInfoDB",
+  "tableName": "ExpiredUserInfoDB",
+  "partitionKey": {
+    "fieldName": "userId",
+    "fieldType": "string"
+  },
+  "gsi": [],
+  "triggerFunctions": []
+}
