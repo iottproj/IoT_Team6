@@ -586,6 +586,23 @@ function App() {
             handleRfidValidation();
           }
         }, [currentPage]);
+    const handleRfidValidation2 = async () => {
+                  try {
+                    const functionUrl = "https://dbdwgksh7s5i6ms6p6dspi3z4q0idjlc.lambda-url.ap-northeast-2.on.aws/";
+                        const response = await axios.get(functionUrl);
+                    console.log("RFID response:", response.data);
+                    if (response.data.message === "NFC is still running") {
+                      handleReturnComplete(); // Navigate to the rental complete page
+                    }
+                  } catch (error) {
+                    console.error("Error validating RFID:", error);
+                  }
+                };
+            useEffect(() => {
+                  if (currentPage === "returnComplete") {
+                    handleRfidValidation2();
+                  }
+                }, [currentPage]);
 
     const renderRfidPage = () => (
       <div className="rfid-page" style={{ textAlign: "center", padding: "40px", backgroundColor: "#eaf4f8", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "10px" }}>
