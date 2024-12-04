@@ -573,6 +573,8 @@ function App() {
               <div className="App">
                 {currentPage === "map" && renderMapPage()}
                 {currentPage === "details" && renderDetailsPage()}
+                {currentPage === "rfid" && renderRfidPage()}
+                {currentPage === "rentalComplete" && renderRentalCompletePage()}
               </div>
           );
         }
