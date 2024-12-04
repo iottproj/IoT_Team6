@@ -41,6 +41,7 @@ function App() {
     const [postInfoResult, setPostInfoResult] = useState(null);
     const [isRfidPage, setIsRfidPage] = useState(false);
     const [isRentalCompletePage, setIsRentalCompletePage] = useState(false);
+    const [isReturnMode, setIsReturnMode] = useState(false);
 
     async function handleLogout() {
         try {
@@ -184,14 +185,14 @@ function App() {
     }
 
       // RFID 리더기 페이지에서 스캔 성공시 대여 완료 페이지로 이동
-        const handleRentalComplete = () => {
+    const handleRentalComplete = () => {
             setIsRentalCompletePage(true);
             setIsRfidPage(false);
             setCurrentPage("rentalComplete");
           };
 
          // 대여 완료 페이지에서 대여완료 버튼 클릭 시
-        const handleReturnToMain = async () => {
+    const handleReturnToMain = async () => {
           try {
                 // GET 요청
                 const response = await axios.get("https://gidqxojiten4ezdkp26uwo4qsi0galib.lambda-url.ap-northeast-2.on.aws/");
@@ -199,7 +200,6 @@ function App() {
 
                 // 성공 처리
                 if (response.data.message === "Shadow updated successfully") {
-                  alert(response.data.message);
                   setIsRentalCompletePage(false);
                   setCurrentPage("details");
                 } else {
@@ -229,7 +229,6 @@ function App() {
 
               // 성공 처리
               if (response.data.message === "Shadow updated successfully") {
-                alert(response.data.message);
                 setIsRfidPage(true);
                 setCurrentPage("rfid");
               } else {
@@ -245,13 +244,27 @@ function App() {
     const handleReturnClick = () => {
         const isClickedReturn = window.confirm(`${selectedLocation.name} 위치에서 우산을 반납하시겠습니까?`);
         if(!isClickedReturn) return
+
+        try {
+                  // GET 요청
+                  const response = await axios.get("https://gidqxojiten4ezdkp26uwo4qsi0galib.lambda-url.ap-northeast-2.on.aws/");
+                  console.log("Response:", response.data);
+
+                  // 성공 처리
+                  if (response.data.message === "Shadow updated successfully") {
+                    setIsRfidPage(true);
+                    setCurrentPage("rfid");
+                  } else {
+                    alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
+                  }
+                } catch (error) {
+                  console.error("대여 요청 중 오류가 발생했습니다:", error);
+                  alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
+                }
+
         if(userInfo.Bcnt == 0 || userInfo.Bcurrent == false) {
             alert("반납할 우산이 없습니다.");
             return
-        }
-        else{
-            postinfotempl(2);
-            alert("잠금이 해제되었습니다. 우산을 올바른 위치에 반납해주세요.");
         }
       };
 
@@ -324,6 +337,15 @@ function App() {
         setSelectedLocation(marker);
         setCurrentPage("details");
     };
+
+    /* 반납이냐 아니냐에 따른 결과 페이지 네비게이션 */
+    const handleComplete = () => {
+          if (isReturnMode) {
+            setCurrentPage("returnComplete");
+          } else {
+            setCurrentPage("rentalComplete");
+          }
+        };
 
     /* 날씨 정보 실시간 반영 */
     useEffect(() => {
@@ -523,26 +545,6 @@ function App() {
             onMouseEnter={(e) => e.target.style.transform = "scale(1.1)"} // 마우스를 올리면 확대
             onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
           />
-
-          <button
-            onClick={handleRentalComplete}
-            style={{
-              padding: "15px 30px",
-              backgroundColor: "#6ca7ae",
-              color: "white",
-              fontSize: "1.2rem",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
-              transition: "all 0.3s ease",
-              marginTop: "20px",
-            }}
-            onMouseOver={(e) => e.target.style.backgroundColor = "#527394"}
-            onMouseOut={(e) => e.target.style.backgroundColor = "#6ca7ae"}
-          >
-            대여 완료
-          </button>
         </div>
       );
     const renderRentalCompletePage = () => (
@@ -575,6 +577,38 @@ function App() {
           </button>
         </div>
       );
+
+    const renderReturnCompletePage = () => (
+        <div className="rental-complete-page" style={{ textAlign: "center", padding: "40px", backgroundColor: "#f0f4f8", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "10px" }}>
+            <h1 style={{ color: "#527394", fontSize: "2.5rem", marginBottom: "20px", textShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)" }}>
+              반납이 완료되었습니다!
+            </h1>
+
+            <p style={{ fontSize: "1.3rem", color: "#6ca7ae", marginBottom: "40px", fontWeight: "bold" }}>
+              우산을 성공적으로 반납하셨습니다. 이용해주셔서 감사합니다!
+            </p>
+
+            <button
+              onClick={handleReturnToMain}
+              style={{
+                padding: "15px 30px",
+                backgroundColor: "#527394",
+                color: "white",
+                fontSize: "1.2rem",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
+                transition: "all 0.3s ease",
+              }}
+              onMouseOver={(e) => e.target.style.backgroundColor = "#6ca7ae"}
+              onMouseOut={(e) => e.target.style.backgroundColor = "#527394"}
+            >
+              반납 완료
+            </button>
+          </div>
+        );
+
     useEffect(() => {
 
         if (userInfo?.sub && !userInfo?.isLoaded) {
@@ -604,6 +638,7 @@ function App() {
                 {currentPage === "details" && renderDetailsPage()}
                 {currentPage === "rfid" && renderRfidPage()}
                 {currentPage === "rentalComplete" && renderRentalCompletePage()}
+                {currentPage === "returnComplete" && renderReturnCompletePage()}
               </div>
           );
         }
