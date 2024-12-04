@@ -237,7 +237,7 @@ function App() {
                     alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
                   }
         };
-
+    /* 대여하기 버튼 클릭시 */
     const handleBorrowClick = async () => {
         //현재 우산 대여 여부확인, 이미 대여중이면 진행 불가
         if(userInfo.Bcurrent == true) {
@@ -266,8 +266,8 @@ function App() {
             }
     };
 
-    /* 반납하기 버튼 클릭시 수정필요 */
-    const handleReturnClick = () => {
+    /* 반납하기 버튼 클릭시 */
+    const handleReturnClick = async () => {
         const isClickedReturn = window.confirm(`${selectedLocation.name} 위치에서 우산을 반납하시겠습니까?`);
         if(!isClickedReturn) return
         try {
