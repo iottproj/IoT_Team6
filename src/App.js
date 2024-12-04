@@ -38,6 +38,8 @@ function App() {
     const [error, setError] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState(null);
     const [postInfoResult, setPostInfoResult] = useState(null);
+    const [isRfidPage, setIsRfidPage] = useState(false);
+    const [isRentalCompletePage, setIsRentalCompletePage] = useState(false);
 
     async function handleLogout() {
         try {
@@ -180,7 +182,19 @@ function App() {
         }
     }
 
-    /* 대여하기 버튼 클릭시 */
+      // RFID 리더기 페이지에서 스캔 성공시 대여 완료 페이지로 이동
+        const handleRentalComplete = () => {
+            setIsRentalCompletePage(true);
+            setIsRfidPage(false);
+            setCurrentPage("rentalComplete");
+          };
+
+         // 대여 완료 페이지에서 대여완료 버튼 클릭 시
+        const handleReturnToMain = () => {
+          setIsRentalCompletePage(false);
+          setCurrentPage("details");
+        };
+
     const handleBorrowClick = () => {
         //현재 우산 대여 여부확인, 이미 대여중이면 진행 불가
         if(userInfo.Bcurrent == true) {
@@ -193,21 +207,9 @@ function App() {
         if (!isConfirmed) {
             return; // 취소시 창 종료
         }
-        // 첫 번째 잠금 해제 진행 코드 작성 부분
-        // 2차적으로 결제 요청 창 띄우기
-        const isPaymentConfirmed = window.confirm("결제를 진행해주세요!");
-        if (!isPaymentConfirmed) {
-            return; // 취소시 창 종료
-        }
-        // 두 번째 잠금 해제 진행 코드 작성 부분
-        else{
-            // 최종적으로 대여 완료 메시지 띄우기
-            postinfotempl(1);
-            alert("우산이 3일간 대여되었습니다!");
-            // 초기 상태로 돌아가기
-            setSelectedLocation(null);
-            setCurrentPage("map");
-        }
+        // RFID 리더 페이지로 이동
+        setIsRfidPage(true);
+        setCurrentPage("rfid");
     };
 
     /* 반납하기 버튼 클릭시 */
@@ -275,7 +277,11 @@ function App() {
                     <h1>사용 방법</h1>
                     <p>1. 우산 번호를 선택하세요.</p>
                     <p>2. "대여하기" 버튼을 클릭하여 우산을 대여하세요. 우산 대여 기간은 3일입니다.</p>
-                    <p>3.. 우산을 반납하려면 "반납하기" 버튼을 클릭하여 우산을 반납하세요. 반드시 올바른 번호에 우산을 넣어주세요!</p>
+                    <p>3. RFID 리더기에 NFC 스티커를 찍어주세요.</p>
+                    <p>4. 잠금이 모두 해제되고 우산을 가져가시면 "대여완료" 버튼을 눌러주세요.</p>
+                    <p>5. 우산을 반납하려면 "반납하기" 버튼을 눌러주세요.</p>
+                    <p>6. RFID 리더기에 NFC 스티커를 찍어주세요.</p>
+                    <p>6. 올바른 위치에 우산을 넣고 "반납 완료" 버튼을 눌러주세요.</p>
                     <p># 만약 우산 대여 기간을 연장하고 싶다면 우산 번호를 누르고 "대여 연장하기" 버튼을 눌러주세요!</p>
                     <p> → 대여 연장기간은 "1일" 입니다. </p>
                     <button onclick="window.close()">닫기</button>
@@ -349,7 +355,7 @@ function App() {
     };
 
     /* 지도 화면 렌더링 */
-        const renderMapPage = () => (
+    const renderMapPage = () => (
           <div>
             <h1 style={{ color: "#527394", fontSize: "1.8rem", marginBottom: "10px" }}>
               무인 우산 대여 서비스
@@ -398,7 +404,7 @@ function App() {
           </div>
         );
 
-      const renderDetailsPage = () => (
+    const renderDetailsPage = () => (
           <div className="App">
             {/* 프로필 버튼 */}
             <button className="profile-button" onClick={toggleProfile}></button>
@@ -467,7 +473,79 @@ function App() {
             </div>
           </div>
             );
-    
+    const renderRfidPage = () => (
+      <div className="rfid-page" style={{ textAlign: "center", padding: "40px", backgroundColor: "#eaf4f8", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "10px" }}>
+          <h1 style={{ color: "#fff", fontSize: "2.5rem", marginBottom: "30px", textShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)" }}>
+            우산을 RFID 리더기까지 가까이 대주세요.
+          </h1>
+
+          {/* 이미지 추가 */}
+          <img
+            src="/icon1.png"
+            alt="RFID 리더기 이미지"
+            style={{
+              maxWidth: "300px",
+              width: "80%",
+              marginBottom: "30px",
+              borderRadius: "20px",
+              boxShadow: "0px 5px 15px rgba(0, 0, 0, 0.2)",
+              transition: "transform 0.3s ease",
+            }}
+            onMouseEnter={(e) => e.target.style.transform = "scale(1.1)"} // 마우스를 올리면 확대
+            onMouseLeave={(e) => e.target.style.transform = "scale(1)"}
+          />
+
+          <button
+            onClick={handleRentalComplete}
+            style={{
+              padding: "15px 30px",
+              backgroundColor: "#6ca7ae",
+              color: "white",
+              fontSize: "1.2rem",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease",
+              marginTop: "20px",
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = "#527394"}
+            onMouseOut={(e) => e.target.style.backgroundColor = "#6ca7ae"}
+          >
+            대여 완료
+          </button>
+        </div>
+      );
+    const renderRentalCompletePage = () => (
+      <div className="rental-complete-page" style={{ textAlign: "center", padding: "40px", backgroundColor: "#f0f4f8", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "10px" }}>
+          <h1 style={{ color: "#527394", fontSize: "2.5rem", marginBottom: "20px", textShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)" }}>
+            대여가 완료되었습니다!
+          </h1>
+
+          <p style={{ fontSize: "1.3rem", color: "#6ca7ae", marginBottom: "40px", fontWeight: "bold" }}>
+            우산을 성공적으로 대여하셨습니다. 이용해주셔서 감사합니다!
+          </p>
+
+          <button
+            onClick={handleReturnToMain}
+            style={{
+              padding: "15px 30px",
+              backgroundColor: "#527394",
+              color: "white",
+              fontSize: "1.2rem",
+              border: "none",
+              borderRadius: "8px",
+              cursor: "pointer",
+              boxShadow: "0px 5px 10px rgba(0, 0, 0, 0.1)",
+              transition: "all 0.3s ease",
+            }}
+            onMouseOver={(e) => e.target.style.backgroundColor = "#6ca7ae"}
+            onMouseOut={(e) => e.target.style.backgroundColor = "#527394"}
+          >
+            대여 완료
+          </button>
+        </div>
+      );
     useEffect(() => {
 
         if (userInfo?.sub && !userInfo?.isLoaded) {
