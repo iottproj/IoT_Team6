@@ -228,6 +228,7 @@ function App() {
 
               // 성공 처리
               if (response.data.message === "Shadow updated successfully") {
+                alert(response.data.message);
                 setIsRfidPage(true);
                 setCurrentPage("rfid");
               } else {
