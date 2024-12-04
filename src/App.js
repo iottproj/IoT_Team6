@@ -226,6 +226,10 @@ function App() {
                     const response = await axios.get("https://dbdwgksh7s5i6ms6p6dspi3z4q0idjlc.lambda-url.ap-northeast-2.on.aws/");
                     console.log("Response:", response.data);
 
+                    if (response.data.message === "NFC is still running") {
+                          alert("잠금장치에 우산이 존재합니다. 우산을 빼주세요.");
+                          return;
+                        }
                     if (response.data.message === "borrow_3 is success!") {
                       setIsRentalCompletePage(false);
                       setCurrentPage("details");
@@ -598,11 +602,6 @@ function App() {
                     console.error("Error validating RFID:", error);
                   }
                 };
-            useEffect(() => {
-                  if (currentPage === "returnComplete") {
-                    handleRfidValidation2();
-                  }
-                }, [currentPage]);
 
     const renderRfidPage = () => (
       <div className="rfid-page" style={{ textAlign: "center", padding: "40px", backgroundColor: "#eaf4f8", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "10px" }}>
