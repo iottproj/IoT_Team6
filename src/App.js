@@ -209,7 +209,7 @@ function App() {
                 console.log("Response:", response.data);
 
                 // 성공 처리
-                if (response.data.message === "borrow_3 is success") {
+                if (response.data.message === "borrow_3 is success!") {
                   setIsRentalCompletePage(false);
                   setCurrentPage("details");
                 } else {
@@ -220,7 +220,7 @@ function App() {
                 alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
               }
     };
-    // 반납 완료 페이지에서 반납 완료 버튼 클릭 시(수정 필요)
+    // 반납 완료 페이지에서 반납 완료 버튼 클릭 시
     const handleReturnToMain1 = async () => {
               try {
                     const response = await axios.get("https://dbdwgksh7s5i6ms6p6dspi3z4q0idjlc.lambda-url.ap-northeast-2.on.aws/");
