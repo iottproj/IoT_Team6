@@ -41,6 +41,7 @@ function App() {
     const [postInfoResult, setPostInfoResult] = useState(null);
     const [isRfidPage, setIsRfidPage] = useState(false);
     const [isRentalCompletePage, setIsRentalCompletePage] = useState(false);
+    const [isReturnCompletePage, setIsReturnCompletePage] = useState(false);
     const [isReturnMode, setIsReturnMode] = useState(false);
 
     async function handleLogout() {
@@ -51,7 +52,7 @@ function App() {
             console.error('Error during logout:', error);
         }
     }
-    
+
     async function getinfowtempl() {
         try {
             const restOperation = get({
@@ -107,7 +108,7 @@ function App() {
                     isExtRent: response.ExtRent     //기간연장 요청여부 플래그
                 }));
             }
-            
+
             console.log('GET call succeeded');
             console.log(response);
         } catch (e) {
@@ -136,7 +137,7 @@ function App() {
                         email: userInfo.email,
                         Bcnt: userInfo.Bcnt + 1,                                //대여횟수 1 증가
                         Bcurrent: true,                                         //대여상태 변경
-                        ExtRent: userInfo.isExtRent,     
+                        ExtRent: userInfo.isExtRent,
                         TTL: (currentTime + (3 * 24 * 60 * 60))                 // 현재 시간 + 3일, 초(sec) 단위
                     }
                     break;
@@ -184,18 +185,26 @@ function App() {
         }
     }
 
-      // RFID 리더기 페이지에서 스캔 성공시 대여 완료 페이지로 이동
+      // RFID 리더기 페이지에서 스캔 성공시 대여 완료 페이지로 이동(추후 호출)
     const handleRentalComplete = () => {
+            postinfotempl(1);
             setIsRentalCompletePage(true);
             setIsRfidPage(false);
             setCurrentPage("rentalComplete");
           };
+    // 추후 호출
+    const handleReturnComplete = () => {
+           postinfotempl(2);
+           setIsRentalCompletePage(true);
+           setIsRfidPage(false);
+           setCurrentPage("returnComplete");
+    };
 
-         // 대여 완료 페이지에서 대여완료 버튼 클릭 시
+    // 대여 완료 페이지에서 대여완료 버튼 클릭 시
     const handleReturnToMain = async () => {
           try {
                 // GET 요청
-                const response = await axios.get("https://gidqxojiten4ezdkp26uwo4qsi0galib.lambda-url.ap-northeast-2.on.aws/");
+                const response = await axios.get("https://dbdwgksh7s5i6ms6p6dspi3z4q0idjlc.lambda-url.ap-northeast-2.on.aws/");
                 console.log("Response:", response.data);
 
                 // 성공 처리
@@ -217,7 +226,6 @@ function App() {
             alert("우산 대여중! 한 번에 한 개의 우산만 대여할 수 있습니다.");
             return;
         }
-
         // 1차적으로 대여 확인 창 띄우기
         const isConfirmed = window.confirm(`${selectedLocation.name} 위치에서 우산을 대여하시겠습니까?`);
         if (!isConfirmed) return;
@@ -378,7 +386,7 @@ function App() {
                 handleLogin();
             }
         }
-        
+
         const fetchWeather = async () => {
             const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
             const city = 'Seoul';
@@ -524,6 +532,28 @@ function App() {
             </div>
           </div>
             );
+    const handleRfidValidation = async () => {
+          try {
+            const functionUrl = "https://dfg2gqquyuwr4nn75awlvptkpe0gjclc.lambda-url.ap-northeast-2.on.aws/";
+            const userId = userInfo?.sub;
+                const response = await axios.get(functionUrl, {
+                  params: { userId: userId }, // 쿼리 파라미터 추가
+                });
+            console.log("RFID response:", response.data);
+            if (response.data.message === "borrow_2 is success") {
+              handleRentalComplete(); // Navigate to the rental complete page
+            }
+          } catch (error) {
+            console.error("Error validating RFID:", error);
+            alert("An error occurred while validating RFID. Please try again.");
+          }
+        };
+        useEffect(() => {
+          if (currentPage === "rfid") {
+            handleRfidValidation();
+          }
+        }, [currentPage]);
+
     const renderRfidPage = () => (
       <div className="rfid-page" style={{ textAlign: "center", padding: "40px", backgroundColor: "#eaf4f8", minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", borderRadius: "10px" }}>
           <h1 style={{ color: "#fff", fontSize: "2.5rem", marginBottom: "30px", textShadow: "2px 2px 5px rgba(0, 0, 0, 0.5)" }}>
