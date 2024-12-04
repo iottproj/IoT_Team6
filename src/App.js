@@ -208,7 +208,7 @@ function App() {
                 console.log("Response:", response.data);
 
                 // 성공 처리
-                if (response.data.message === "Shadow updated successfully") {
+                if (response.data.message === "borrow_3 is success") {
                   setIsRentalCompletePage(false);
                   setCurrentPage("details");
                 } else {
