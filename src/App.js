@@ -10,6 +10,7 @@ import { Amplify } from 'aws-amplify'
 import { post, get } from 'aws-amplify/api';
 import amplifyconfig from './amplifyconfiguration.json';
 import awsExports from './aws-exports';
+import axios from "axios";
 
 Amplify.configure(awsExports); // Amplify 초기화
 Amplify.configure(amplifyconfig);
