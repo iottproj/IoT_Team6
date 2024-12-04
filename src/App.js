@@ -190,12 +190,27 @@ function App() {
           };
 
          // 대여 완료 페이지에서 대여완료 버튼 클릭 시
-        const handleReturnToMain = () => {
-          setIsRentalCompletePage(false);
-          setCurrentPage("details");
+        const handleReturnToMain = async () => {
+          try {
+                // GET 요청
+                const response = await axios.get("https://gidqxojiten4ezdkp26uwo4qsi0galib.lambda-url.ap-northeast-2.on.aws/");
+                console.log("Response:", response.data);
+
+                // 성공 처리
+                if (response.data.message === "Shadow updated successfully") {
+                  alert(response.data.message);
+                  setIsRentalCompletePage(false);
+                  setCurrentPage("details");
+                } else {
+                  alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
+                }
+              } catch (error) {
+                console.error("대여 요청 중 오류가 발생했습니다:", error);
+                alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
+              }
         };
 
-    const handleBorrowClick = () => {
+    const handleBorrowClick = async () => {
         //현재 우산 대여 여부확인, 이미 대여중이면 진행 불가
         if(userInfo.Bcurrent == true) {
             alert("우산 대여중! 한 번에 한 개의 우산만 대여할 수 있습니다.");
@@ -204,12 +219,24 @@ function App() {
 
         // 1차적으로 대여 확인 창 띄우기
         const isConfirmed = window.confirm(`${selectedLocation.name} 위치에서 우산을 대여하시겠습니까?`);
-        if (!isConfirmed) {
-            return; // 취소시 창 종료
-        }
+        if (!isConfirmed) return;
         // RFID 리더 페이지로 이동
-        setIsRfidPage(true);
-        setCurrentPage("rfid");
+        try {
+              // GET 요청
+              const response = await axios.get("https://gidqxojiten4ezdkp26uwo4qsi0galib.lambda-url.ap-northeast-2.on.aws/");
+              console.log("Response:", response.data);
+
+              // 성공 처리
+              if (response.data.message === "Shadow updated successfully") {
+                setIsRfidPage(true);
+                setCurrentPage("rfid");
+              } else {
+                alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
+              }
+            } catch (error) {
+              console.error("대여 요청 중 오류가 발생했습니다:", error);
+              alert("대여 요청에 실패했습니다. 다시 시도해주세요.");
+            }
     };
 
     /* 반납하기 버튼 클릭시 */
